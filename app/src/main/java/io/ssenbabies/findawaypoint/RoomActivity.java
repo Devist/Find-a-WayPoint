@@ -34,15 +34,25 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
-        initViews();
+        initSettings();
+        setLayout();
+    }
 
+    private void initSettings(){
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
+    }
 
+    private void setLayout() {
+        fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
+        tvPlaceDetails = (TextView) findViewById(R.id.placeDetails);
+    }
+
+    private void setListener(){
         fabPickPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,11 +65,6 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-    }
-
-    private void initViews() {
-        fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
-        tvPlaceDetails = (TextView) findViewById(R.id.placeDetails);
     }
 
     @Override
