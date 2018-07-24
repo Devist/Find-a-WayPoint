@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Find a Waypoint</string>
+    <string name="app_name">여기닷</string>
+
+    <string name="kakao_app_key">be17faafa2953a0098c546f0be584a11</string>
 </resources>

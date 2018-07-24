@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:padding="10dp"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".RoomActivity"
+    tools:showIn="@layout/activity_room">
 
-    <Button
-        android:id="@+id/btnAddRoom"
+    <TextView
+        android:id="@+id/placeDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="어디 닷?"
+        android:text="FAB 버튼으로 주소 검색 후 결과창 나오는 곳"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
