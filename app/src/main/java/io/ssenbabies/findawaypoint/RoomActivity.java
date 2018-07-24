@@ -50,6 +50,7 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
     private void setLayout() {
         fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
         tvPlaceDetails = (TextView) findViewById(R.id.placeDetails);
+        setListener();
     }
 
     private void setListener(){
