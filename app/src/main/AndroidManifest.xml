@@ -16,7 +16,7 @@
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="@string/kakao_app_key" />
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyD0rYuw09d52cYRnA_VM2Uob1xN9fx3pIY"/>
 
-        <activity android:name=".SplashActivity"
+        <activity android:name=".pages.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,8 +25,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".RoomActivity"/>
+        <activity android:name=".pages.MainActivity"/>
+        <activity android:name=".pages.CreateActivity"
+            android:windowSoftInputMode="adjustUnspecified"/>
+        <activity android:name=".pages.RoomActivity"/>
+        <activity android:name=".pages.ShareActivity"/>
     </application>
 
 </manifest>
