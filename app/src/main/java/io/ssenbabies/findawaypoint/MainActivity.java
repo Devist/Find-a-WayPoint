@@ -3,9 +3,16 @@ package io.ssenbabies.findawaypoint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button btnAddRoom;
@@ -13,9 +20,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setLayout();
+
+        RecyclerView recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerRoomView.setHasFixedSize(true);
+        recyclerRoomView.setLayoutManager(layoutManager);
+
+        List<Room> rooms = new ArrayList<>();
+        Room[] room = new Room[5];
+        room[0] = new Room("취업스터디모임","서울 강남구 역삼동","강남역,역삼역,신논현역");
+        room[1] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
+        room[2] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
+        room[3] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
+        room[4] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
+
+        for (int i = 0; i < 5; i++) {
+            rooms.add(room[i]);
+        }
+
+        recyclerRoomView.setAdapter(new RoomAdapter(getApplicationContext(), rooms, R.layout.activity_main));
     }
 
     private void setLayout(){
@@ -32,4 +60,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 }
