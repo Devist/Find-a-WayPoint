@@ -19,7 +19,7 @@
             <Button
                 android:id="@+id/btnAddRoom"
                 android:layout_width="match_parent"
-                android:layout_height="150px"
+                android:layout_height="wrap_content"
                 android:background="#888"
                 android:layout_margin="@dimen/fab_margin"
                 android:textColor="#fff"

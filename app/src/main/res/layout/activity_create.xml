@@ -46,7 +46,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:textSize="20sp"
-                android:layout_margin="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/colorPrimaryDark"
                 android:enabled="false"
                 android:text="공유하고 내 출발위치 정하기"/>
