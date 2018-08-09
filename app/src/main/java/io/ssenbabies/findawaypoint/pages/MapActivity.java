@@ -58,12 +58,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     CircleOptions circle1KM; // 반경 1km
     Circle circle_now; // 현재 위치 반경
     CircleOptions circle1Km_now; // 현재 위치 반경 1km
-    Button btn_cafe, btn_restaurant, btn_alchol, btn_movie, btn_funny;
+    Button btn_cafe, btn_restaurant, btn_alchol, btn_movie, btn_funny, btn_home;
     int type = 1; // 장소 종류 default = 1 ( 카페 )
     ListView listView; // 장소 출력 리스트뷰
     ArrayList<GooglePlace> placesArrayList; // google place api로 받아온 장소 데이터
     PlaceAdapter adapter;
-    TextView tv_station1, tv_station2, tv_station3;
+    TextView tv_station1, tv_station2, tv_station3, roomName;
+    String room;// 방 이름
 
     ArrayList<Marker> previous_marker = new ArrayList<>();
     @Override
@@ -71,25 +72,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-
         Intent intent = getIntent();
         lat = intent.getExtras().getFloat("MyLat");
         lng = intent.getExtras().getFloat("MyLng");
+        room = intent.getStringExtra("room_name");
 
         btn_cafe = (Button) findViewById(R.id.btn_cafe);
         btn_restaurant = (Button) findViewById(R.id.btn_restaraunt);
         btn_funny = (Button) findViewById(R.id.btn_funny);
         btn_movie = (Button) findViewById(R.id.btn_movie);
         btn_alchol = (Button) findViewById(R.id.btn_alchol);
+        btn_home = (Button) findViewById(R.id.btn_home);
         tv_station1 = (TextView) findViewById(R.id.tv_station1);
         tv_station2 = (TextView) findViewById(R.id.tv_station2);
         tv_station3 = (TextView) findViewById(R.id.tv_station3);
+        roomName = (TextView) findViewById(R.id.tv_room_name);
+
+        roomName.setText(room);
 
         btn_cafe.setOnClickListener(this);
         btn_restaurant.setOnClickListener(this);
         btn_funny.setOnClickListener(this);
         btn_movie.setOnClickListener(this);
         btn_alchol.setOnClickListener(this);
+        btn_home.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.place_list);
         placesArrayList = new ArrayList<GooglePlace>();
@@ -221,7 +227,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         map = googleMap;
 
         LatLng My = new LatLng(lat, lng);
-
         String my_address = getAddress(this, lat, lng);
 
         //나의 위치
@@ -232,9 +237,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions_my.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.now)));
         markerOptions_my.snippet(my_address);
 
-        googleMap.addMarker(markerOptions_my);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(My));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        map.addMarker(markerOptions_my);
+        map.moveCamera(CameraUpdateFactory.newLatLng(My));
+        map.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         // 반경 1KM원
         circle1Km_now = new CircleOptions().center(new LatLng(lat, lng)) //원점
@@ -359,6 +364,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
+
+            //홈버튼
+            case R.id.btn_home:
+                startActivity(new Intent(MapActivity.this, MainActivity.class));
+                break;
 
             case R.id.btn_cafe:
                 type = 1;

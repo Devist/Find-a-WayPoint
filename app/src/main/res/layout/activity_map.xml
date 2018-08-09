@@ -11,9 +11,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tv_room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text = "학원 스터디모임"
+                android:textSize="20dp"></TextView>
+
+            <Button
+                android:id="@+id/btn_home"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="홈버튼"/>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -58,7 +79,7 @@
             android:id="@+id/map"
             class="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="380dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
 

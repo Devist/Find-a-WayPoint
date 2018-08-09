@@ -56,8 +56,12 @@ public class CreateActivity extends AppCompatActivity {
         btnCreateName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(editAppointmentName.getText().length()>2)
-                    startActivity(new Intent(getApplicationContext(), ShareActivity.class));
+                if(editAppointmentName.getText().length()>2) {
+
+                    Intent intent = new Intent(getApplication(), ShareActivity.class);
+                    intent.putExtra("room_name", editAppointmentName.getText().toString());
+                    startActivity(intent);
+                }
                 else
                     Snackbar.make(view, "먼저 상단의 모임 이름을 입력해 주세요!", Snackbar.LENGTH_LONG).show();
             }

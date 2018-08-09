@@ -27,9 +27,10 @@ import io.ssenbabies.findawaypoint.location.Location;
 
 public class ShareActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView btnCancle;
+    private TextView btnCancle, roomName;
     private Button btnBack;
     private Button shareKakao, shareSns, shareCopy, goMap;
+    String room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +38,10 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
-        setLayout();
+        Intent intent = getIntent();
+        room = intent.getStringExtra("room_name");
 
-        shareKakao = (Button) findViewById(R.id.btn_kakao);
-        shareSns = (Button) findViewById(R.id.btn_sns);
-        shareCopy = (Button) findViewById(R.id.btn_copy);
-        goMap = (Button) findViewById(R.id.btn_map);
+        setLayout();
 
         shareKakao.setOnClickListener(this);
         shareSns.setOnClickListener(this);
@@ -55,9 +54,16 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         Toolbar cancelToolbar = (Toolbar) findViewById(R.id.toolbarCancle);
         setSupportActionBar(cancelToolbar);
 
+
         btnCancle = (TextView) findViewById(R.id.btnCancle);
         btnBack = (Button) findViewById(R.id.btnBack);
+        roomName = (TextView) findViewById(R.id.tv_room_name);
+        shareKakao = (Button) findViewById(R.id.btn_kakao);
+        shareSns = (Button) findViewById(R.id.btn_sns);
+        shareCopy = (Button) findViewById(R.id.btn_copy);
+        goMap = (Button) findViewById(R.id.btn_map);
 
+        roomName.setText(room);
         setListener();
     }
 
@@ -130,6 +136,7 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
 
                                 intent.putExtra("MyLat", lat);
                                 intent.putExtra("MyLng", lng);
+                                intent.putExtra("room_name", room);
                                 startActivity(intent);
                             }
                         });
