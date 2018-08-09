@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">여기닷</string>
+    <string name="app_name">중간지점 찾기</string>
 
-    <string name="kakao_app_key">be17faafa2953a0098c546f0be584a11</string>
     <string name="set_appointments">약속장소 정하기</string>
+    <string name="kakao_app_key">e74ecc17512de3a13f47899e96e53fd2</string>
+    <string name="kakao_scheme">kakaoe74ecc17512de3a13f47899e96e53fd2</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>

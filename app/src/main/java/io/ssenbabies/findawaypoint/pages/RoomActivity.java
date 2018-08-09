@@ -66,7 +66,6 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
             }
         });
-
     }
 
     @Override
@@ -96,6 +95,12 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
                 String latitude = String.valueOf(place.getLatLng().latitude);
                 String longitude = String.valueOf(place.getLatLng().longitude);
                 String address = String.format("%s", place.getAddress());
+                String phoneNumber = String.format("%s", place.getPhoneNumber());
+                String webSite = String.format("%s", place.getWebsiteUri());
+                String Star = String.format("%s", place.getRating());
+                String price = String.format("%s", place.getPriceLevel());
+                String type = String.format("%s", place.getPlaceTypes());
+
                 stBuilder.append("Name: ");
                 stBuilder.append(placename);
                 stBuilder.append("\n");
@@ -107,9 +112,21 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
                 stBuilder.append("\n");
                 stBuilder.append("Address: ");
                 stBuilder.append(address);
+                stBuilder.append("\n");
+                stBuilder.append("Dial: ");
+                stBuilder.append(phoneNumber);
+                stBuilder.append("\n");
+                stBuilder.append("WebSite: ");
+                stBuilder.append(webSite);
+                stBuilder.append("\n");
+                stBuilder.append("Star: ");
+                stBuilder.append(Star);
+                stBuilder.append("\n");
+                stBuilder.append("type: ");
+                stBuilder.append(type);
+                stBuilder.append("\n");
                 tvPlaceDetails.setText(stBuilder.toString());
             }
         }
     }
-
 }
