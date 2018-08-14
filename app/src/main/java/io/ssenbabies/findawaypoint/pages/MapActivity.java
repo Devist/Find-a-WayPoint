@@ -251,7 +251,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     // 위도, 경도 -> 주소값
-    String getAddress(Context context, double lat, double lon) {
+    public static String getAddress(Context context, double lat, double lon) {
 
         Geocoder geocoder;geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;

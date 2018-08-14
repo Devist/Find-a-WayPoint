@@ -6,8 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".pages.RoomActivity">
 
-
-    <include layout="@layout/content_room" />
+    <fragment
+        android:id="@+id/map_choice"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="550dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

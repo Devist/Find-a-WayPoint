@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +16,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.message.template.LinkObject;
@@ -25,11 +34,11 @@ import org.w3c.dom.Text;
 import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.location.Location;
 
-public class ShareActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShareActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView btnCancle, roomName;
     private Button btnBack;
-    private Button shareKakao, shareSns, shareCopy, goMap;
+    private Button shareKakao, shareSns, shareCopy, choice_start, goMap;
     String room;
 
     @Override
@@ -46,6 +55,7 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         shareKakao.setOnClickListener(this);
         shareSns.setOnClickListener(this);
         shareCopy.setOnClickListener(this);
+        choice_start.setOnClickListener(this);
         goMap.setOnClickListener(this);
     }
 
@@ -54,13 +64,13 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
         Toolbar cancelToolbar = (Toolbar) findViewById(R.id.toolbarCancle);
         setSupportActionBar(cancelToolbar);
 
-
         btnCancle = (TextView) findViewById(R.id.btnCancle);
         btnBack = (Button) findViewById(R.id.btnBack);
         roomName = (TextView) findViewById(R.id.tv_room_name);
         shareKakao = (Button) findViewById(R.id.btn_kakao);
         shareSns = (Button) findViewById(R.id.btn_sns);
         shareCopy = (Button) findViewById(R.id.btn_copy);
+        choice_start = (Button) findViewById(R.id.btn_start);
         goMap = (Button) findViewById(R.id.btn_map);
 
         roomName.setText(room);
@@ -120,6 +130,25 @@ public class ShareActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.btn_copy:
                 Toast.makeText(this, "링크 복사", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.btn_start:
+                Location.requestSingleUpdate(this.getApplicationContext(),
+                        new Location.LocationCallback() {
+                            @Override
+                            public void onNewLocationAvailable(Location.GPSCoordinates location) {
+
+                                float lat = location.latitude;
+                                float lng = location.longitude;
+
+                                Toast.makeText(ShareActivity.this, "출발지 지정", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(ShareActivity.this, RoomActivity.class);
+
+                                intent.putExtra("MyLat", lat);
+                                intent.putExtra("MyLng", lng);
+                                startActivity(intent);
+                            }
+                        });
                 break;
 
             case R.id.btn_map:
