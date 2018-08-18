@@ -12,7 +12,7 @@ public class NetRetrofit {
     }
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
+            .baseUrl("http://here-dot.kro.kr/")
             .addConverterFactory(GsonConverterFactory.create()) // 파싱등록
             .build();
 

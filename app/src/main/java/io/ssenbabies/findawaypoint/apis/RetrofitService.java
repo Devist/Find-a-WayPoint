@@ -10,5 +10,5 @@ import retrofit2.http.Path;
 
 public interface RetrofitService {
     @GET("users/{user}/repos")
-    Call<ArrayList<JsonObject>> getListRepos(@Path("user") String id);
+    Call<ArrayList<JsonObject>> getListRepos(@Path("user") String id, @Path("get") String bw);
 }
