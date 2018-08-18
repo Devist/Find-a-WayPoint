@@ -30,6 +30,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import io.ssenbabies.findawaypoint.R;
 
 /* Use this to get SHA1 Key using CMD in Windows
@@ -47,14 +54,32 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
     private TextView tvPlaceDetails;
     private FloatingActionButton fabPickPlace;
 
+    private Socket mSocket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
         Intent intent = getIntent();
-        lat = intent.getExtras().getFloat("MyLat");
-        lng = intent.getExtras().getFloat("MyLng");
+        try{
+            lat = intent.getExtras().getFloat("MyLat");
+            lng = intent.getExtras().getFloat("MyLng");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            mSocket = IO.socket("http://here-dot.kro.kr/");
+            mSocket.connect();
+
+            mSocket.on(Socket.EVENT_CONNECT, onConnect);
+            mSocket.on("connection", onMessageReceived);
+        } catch(URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+
 
         initSettings();
         setLayout();
@@ -65,6 +90,31 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
 
         mapFragment.getMapAsync(this);
     }
+
+    // Socket서버에 connect 된 후, 서버로부터 전달받은 'Socket.EVENT_CONNECT' Event 처리.
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            // your code...
+            Log.d("소켓",args.toString());
+        }
+    };
+    // 서버로부터 전달받은 'chat-message' Event 처리.
+    private Emitter.Listener onMessageReceived = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
+            JSONObject receivedData = (JSONObject) args[0];
+            try{
+                Log.d("소켓",receivedData.getString("msg"));
+            }catch(Exception e){
+
+            }
+
+            // your code...
+        }
+    };
+
 
     private void initSettings(){
         mGoogleApiClient = new GoogleApiClient

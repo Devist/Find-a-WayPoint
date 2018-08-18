@@ -1,16 +1,15 @@
-package io.ssenbabies.findawaypoint;
+package io.ssenbabies.findawaypoint.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+
+import io.ssenbabies.findawaypoint.R;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     Context context;
@@ -38,6 +37,11 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         holder.roomTitle.setText(room.getRoomTitle());
         holder.appointmentPlaceContents.setText(room.getAppointmentPlaceContents());
         holder.arroundStationContents.setText(room.getArroundStationContents());
+        if(room.getIsOnGoing()==1 )
+            holder.txtIsOnGoing.setText("진행중 ");
+        else
+            holder.txtIsOnGoing.setText("완료");
+
 //        holder.cardview.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -55,12 +59,15 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         TextView roomTitle;
         TextView appointmentPlaceContents;
         TextView arroundStationContents;
+        TextView txtIsOnGoing;
 
         public ViewHolder(View itemView) {
             super(itemView);
             roomTitle = (TextView) itemView.findViewById(R.id.txtRoomTitle);
             appointmentPlaceContents = (TextView) itemView.findViewById(R.id.txtAppointmentPlaceContents);
             arroundStationContents = (TextView) itemView.findViewById(R.id.txtArroundStationContents);
+            txtIsOnGoing = (TextView) itemView.findViewById(R.id.txtIsOnGoing);
+
         }
     }
 }

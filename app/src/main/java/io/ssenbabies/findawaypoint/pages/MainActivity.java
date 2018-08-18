@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.ssenbabies.findawaypoint.R;
-import io.ssenbabies.findawaypoint.Room;
-import io.ssenbabies.findawaypoint.RoomAdapter;
+import io.ssenbabies.findawaypoint.adapter.Room;
+import io.ssenbabies.findawaypoint.adapter.RoomAdapter;
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerRoomView;
     private Dialog findDialog;
     String Tag = "Android";
+
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
         }
 
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
+
         setLayout();
     }
 
@@ -57,17 +62,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerRoomView.setHasFixedSize(true);
         recyclerRoomView.setLayoutManager(layoutManager);
 
-        List<Room> rooms = new ArrayList<>();
-        Room[] room = new Room[5];
-        room[0] = new Room("취업스터디모임","서울 강남구 역삼동","강남역,역삼역,신논현역");
-        room[1] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
-        room[2] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
-        room[3] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
-        room[4] = new Room("넥스터즈 샌애기팀","서울 강남구 역삼동","강남역,역삼역,신논현역");
 
-        for (int i = 0; i < 5; i++) {
-            rooms.add(room[i]);
-        }
+//        dbHelper.insertSampleRoom();
+
+        List<Room> rooms = dbHelper.getAppointments();
+        Room[] room = new Room[5];
 
         recyclerRoomView.setAdapter(new RoomAdapter(getApplicationContext(), rooms, R.layout.activity_main));
 
@@ -105,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Log.d("Test",tagOfRoom.getText().toString());
+                        startActivity(new Intent(MainActivity.this, RoomActivity.class));
                     }
                 });
 

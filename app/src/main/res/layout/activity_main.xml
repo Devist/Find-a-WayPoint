@@ -51,6 +51,7 @@
             android:layout_weight="4"
             android:layout_height="0px"
             android:padding="5dp"
+            android:gravity="bottom"
             android:layout_margin="10dp">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerRoomView"

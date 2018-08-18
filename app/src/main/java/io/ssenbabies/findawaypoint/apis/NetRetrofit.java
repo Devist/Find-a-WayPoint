@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.rest;
+package io.ssenbabies.findawaypoint.apis;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

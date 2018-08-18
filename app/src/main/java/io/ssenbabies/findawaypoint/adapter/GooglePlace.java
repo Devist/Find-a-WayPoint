@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.DTO;
+package io.ssenbabies.findawaypoint.adapter;
 
 /**
  * Created by xowns on 2018-08-09.

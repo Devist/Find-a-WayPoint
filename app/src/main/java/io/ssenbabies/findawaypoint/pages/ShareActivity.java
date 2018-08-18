@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,12 +13,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.kakao.kakaolink.v2.KakaoLinkResponse;
 import com.kakao.kakaolink.v2.KakaoLinkService;
 import com.kakao.message.template.LinkObject;
@@ -29,10 +20,8 @@ import com.kakao.message.template.TextTemplate;
 import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 
-import org.w3c.dom.Text;
-
 import io.ssenbabies.findawaypoint.R;
-import io.ssenbabies.findawaypoint.location.Location;
+import io.ssenbabies.findawaypoint.utils.Location;
 
 public class ShareActivity extends AppCompatActivity implements View.OnClickListener{
 

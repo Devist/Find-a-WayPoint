@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.location;
+package io.ssenbabies.findawaypoint.utils;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

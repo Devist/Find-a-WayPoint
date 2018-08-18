@@ -33,10 +33,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import io.ssenbabies.findawaypoint.DTO.GooglePlace;
-import io.ssenbabies.findawaypoint.PlaceAdapter;
+import io.ssenbabies.findawaypoint.adapter.GooglePlace;
+import io.ssenbabies.findawaypoint.adapter.GooglePlaceAdapter;
 import io.ssenbabies.findawaypoint.R;
 import noman.googleplaces.NRPlaces;
 import noman.googleplaces.Place;
@@ -62,7 +61,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     int type = 1; // 장소 종류 default = 1 ( 카페 )
     ListView listView; // 장소 출력 리스트뷰
     ArrayList<GooglePlace> placesArrayList; // google place api로 받아온 장소 데이터
-    PlaceAdapter adapter;
+    GooglePlaceAdapter adapter;
     TextView tv_station1, tv_station2, tv_station3, roomName;
     String room;// 방 이름
 
@@ -108,7 +107,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         showPlaceInformation(new LatLng(lat, lng), type); //력 디폴트 장소인 카페 출
 
-        adapter = new PlaceAdapter(this, placesArrayList);
+        adapter = new GooglePlaceAdapter(this, placesArrayList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(this);

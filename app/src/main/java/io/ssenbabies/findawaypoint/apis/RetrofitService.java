@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.rest;
+package io.ssenbabies.findawaypoint.apis;
 
 import com.google.gson.JsonObject;
 
