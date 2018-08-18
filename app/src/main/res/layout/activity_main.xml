@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_weight="3">
             <Button
                 android:id="@+id/btnAddRoom"
@@ -26,6 +27,17 @@
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:text="@string/set_appointments" />
+
+            <Button
+                android:id="@+id/btnFindRoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#888"
+                android:layout_margin="@dimen/fab_margin"
+                android:textColor="#fff"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="@string/find_appointments" />
         </LinearLayout>
 
 

@@ -3,6 +3,7 @@
     package="io.ssenbabies.findawaypoint">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
