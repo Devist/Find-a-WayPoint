@@ -38,8 +38,7 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
         //버전이 바뀌었을 때 기존데이터베이스를 어떻게 변경할 것인지 작성한다.
         //각 버전의 변경 내용들을 버전마다 작성해야됨
     }
-
-
+    
     //등록
     public void insert(String query) {
         SQLiteDatabase db = getWritableDatabase();
