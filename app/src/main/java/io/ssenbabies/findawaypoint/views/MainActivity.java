@@ -11,8 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnFindAppointment;
     private RecyclerView recyclerRoomView;
     private Dialog findDialog;
-    String Tag = "Android";
+    private EditText editCode;
 
     private DBHelper dbHelper;
 
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setLayout(){
         btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
+        editCode = (EditText) findViewById(R.id.edit_code);
 //        btnFindRoom = (Button) findViewById(R.id.btnFindRoom);
 
         recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
@@ -84,6 +88,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, CreateActivity.class));
+            }
+        });
+
+        editCode.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //final int DRAWABLE_LEFT = 0;
+                //final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                //final int DRAWABLE_BOTTOM = 3;
+
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (editCode.getRight() - editCode.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+
+
+                        return true;
+                    }
+                }
+                return false;
             }
         });
 
