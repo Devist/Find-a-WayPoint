@@ -36,6 +36,7 @@
         <activity android:name=".views.RoomActivity"/>
         <activity android:name=".views.ShareActivity"/>
         <activity android:name=".views.MapActivity"></activity>
+        <activity android:name=".views.NameActivity"></activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
