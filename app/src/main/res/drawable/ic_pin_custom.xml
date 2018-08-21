@@ -5,7 +5,7 @@
     android:drawable="@drawable/ic_pin"
     android:width="35dp"
     android:height="35dp"
-    android:end="20dp"
+    android:end="60dp"
     />
 
 </layer-list >
