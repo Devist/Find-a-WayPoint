@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.ssenbabies.findawaypoint.adapter.Room;
+import io.ssenbabies.findawaypoint.views.adapters.Room;
 
 /**
  * Created by xowns on 2018-08-10.
@@ -37,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void insertSampleRoom(){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO APPOINTMENTS(_id,_name,_place,_station,_ongoing) VALUES('40','예제약속','서울 강남구 역삼동','강남역,역삼역',0);");
+        db.execSQL("INSERT INTO APPOINTMENTS(_id,_name,_place,_station,_ongoing) VALUES('60','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역',1);");
         db.close();
     }
 

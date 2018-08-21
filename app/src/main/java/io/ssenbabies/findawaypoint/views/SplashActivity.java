@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.pages;
+package io.ssenbabies.findawaypoint.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import io.ssenbabies.findawaypoint.R;
-import io.ssenbabies.findawaypoint.pages.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

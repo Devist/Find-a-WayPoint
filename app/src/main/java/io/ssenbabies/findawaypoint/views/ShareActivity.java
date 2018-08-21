@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.pages;
+package io.ssenbabies.findawaypoint.views;
 
 
 import android.content.Intent;

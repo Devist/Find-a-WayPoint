@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.pages;
+package io.ssenbabies.findawaypoint.views;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -11,15 +11,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.util.Log;
-import android.widget.EditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.ssenbabies.findawaypoint.R;
-import io.ssenbabies.findawaypoint.adapter.Room;
-import io.ssenbabies.findawaypoint.adapter.RoomAdapter;
+import io.ssenbabies.findawaypoint.views.adapters.Room;
+import io.ssenbabies.findawaypoint.views.adapters.RoomAdapter;
 import io.ssenbabies.findawaypoint.databases.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setLayout(){
         btnAddRoom = (Button) findViewById(R.id.btnAddRoom);
-        btnFindRoom = (Button) findViewById(R.id.btnFindRoom);
+//        btnFindRoom = (Button) findViewById(R.id.btnFindRoom);
 
         recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerRoomView.setLayoutManager(layoutManager);
 
 
-//        dbHelper.insertSampleRoom();
+        //dbHelper.insertSampleRoom();
 
         List<Room> rooms = dbHelper.getAppointments();
         Room[] room = new Room[5];
@@ -83,33 +80,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnFindRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findDialog = new Dialog(MainActivity.this);
-                findDialog.setContentView(R.layout.dialog_find);
-                findDialog.show();
-                final EditText tagOfRoom = (EditText)findDialog.findViewById(R.id.tag_of_room);
-                Button btnEnterRoom = (Button)findDialog.findViewById(R.id.btn_enter_room);
-                Button btnEnterCancle = (Button)findDialog.findViewById(R.id.btn_enter_cancle);
-
-                btnEnterCancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        findDialog.cancel();
-                    }
-                });
-
-                btnEnterRoom.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("Test",tagOfRoom.getText().toString());
-                        startActivity(new Intent(MainActivity.this, RoomActivity.class));
-                    }
-                });
-
-            }
-        });
+//        btnFindRoom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                findDialog = new Dialog(MainActivity.this);
+//                findDialog.setContentView(R.layout.dialog_find);
+//                findDialog.show();
+//                final EditText tagOfRoom = (EditText)findDialog.findViewById(R.id.tag_of_room);
+//                Button btnEnterRoom = (Button)findDialog.findViewById(R.id.btn_enter_room);
+//                Button btnEnterCancle = (Button)findDialog.findViewById(R.id.btn_enter_cancle);
+//
+//                btnEnterCancle.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        findDialog.cancel();
+//                    }
+//                });
+//
+//                btnEnterRoom.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Log.d("Test",tagOfRoom.getText().toString());
+//                        startActivity(new Intent(MainActivity.this, RoomActivity.class));
+//                    }
+//                });
+//
+//            }
+//        });
     }
 
 

@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.apis;
+package io.ssenbabies.findawaypoint.network;
 
 import com.google.gson.JsonObject;
 

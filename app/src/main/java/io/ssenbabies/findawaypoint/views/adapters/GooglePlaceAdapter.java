@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.adapter;
+package io.ssenbabies.findawaypoint.views.adapters;
 
 import android.app.SearchManager;
 import android.content.Context;

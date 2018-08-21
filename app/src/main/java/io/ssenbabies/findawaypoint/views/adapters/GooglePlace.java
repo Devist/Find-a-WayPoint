@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.adapter;
+package io.ssenbabies.findawaypoint.views.adapters;
 
 /**
  * Created by xowns on 2018-08-09.

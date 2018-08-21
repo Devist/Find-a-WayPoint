@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.pages;
+package io.ssenbabies.findawaypoint.views;
 
 import android.app.FragmentManager;
 import android.content.Context;
@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.ssenbabies.findawaypoint.adapter.GooglePlace;
-import io.ssenbabies.findawaypoint.adapter.GooglePlaceAdapter;
+import io.ssenbabies.findawaypoint.views.adapters.GooglePlace;
+import io.ssenbabies.findawaypoint.views.adapters.GooglePlaceAdapter;
 import io.ssenbabies.findawaypoint.R;
 import noman.googleplaces.NRPlaces;
 import noman.googleplaces.Place;

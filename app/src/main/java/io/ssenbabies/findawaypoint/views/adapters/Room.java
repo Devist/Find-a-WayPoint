@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.adapter;
+package io.ssenbabies.findawaypoint.views.adapters;
 
 public class Room {
 

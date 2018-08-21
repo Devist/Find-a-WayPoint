@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint.adapter;
+package io.ssenbabies.findawaypoint.views.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
