@@ -102,7 +102,7 @@ public class WaySocket {
         @Override
         public void call(Object... args) {
             // your code...
-            Log.d("소켓",args.toString());
+            Log.d("소켓 ",args.toString());
         }
     };
 
@@ -113,7 +113,7 @@ public class WaySocket {
             // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
             JSONObject receivedData = (JSONObject) args[0];
             try{
-                Log.d("소켓",receivedData.getString("msg"));
+                Log.d("소켓 커넥션 시도 : ",receivedData.getString("msg"));
             }catch(Exception e){
 
             }

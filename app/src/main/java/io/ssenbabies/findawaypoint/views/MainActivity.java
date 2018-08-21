@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,13 +17,14 @@ import android.widget.Button;
 import java.util.List;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.network.WaySocket;
 import io.ssenbabies.findawaypoint.views.adapters.Room;
 import io.ssenbabies.findawaypoint.views.adapters.RoomAdapter;
 import io.ssenbabies.findawaypoint.databases.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnAddRoom;
+    private FloatingActionButton btnAddRoom;
     private Button btnFindRoom;
     private Button btnFindAppointment;
     private RecyclerView recyclerRoomView;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        WaySocket.getInstance();
+
         //위치 권한 다이얼로그
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLayout(){
-        btnAddRoom = (Button) findViewById(R.id.btnAddRoom);
+        btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
 //        btnFindRoom = (Button) findViewById(R.id.btnFindRoom);
 
         recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
