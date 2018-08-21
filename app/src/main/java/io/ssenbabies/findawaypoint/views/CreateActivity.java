@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,12 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.network.WaySocket;
 
 public class CreateActivity extends AppCompatActivity {
 
     private TextView btnCancel;
-    private Button btnCreateName;
-    private EditText editAppointmentName;
+    private Button btnShare;
+    private EditText editAppointment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +39,8 @@ public class CreateActivity extends AppCompatActivity {
         setSupportActionBar(cancelToolbar);
 
         btnCancel = (TextView)findViewById(R.id.btnCancle);
-        editAppointmentName = (EditText)findViewById(R.id.editAppointmentName);
-        btnCreateName = (Button)findViewById(R.id.btnCreateName);
-        btnCreateName.setEnabled(true);
+        editAppointment = (EditText)findViewById(R.id.edit_appointment);
+        btnShare = (Button)findViewById(R.id.btn_share);
 
         setListener();
     }
@@ -52,41 +53,74 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
-        btnCreateName.setOnClickListener(new View.OnClickListener() {
+        editAppointment.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                if(editAppointmentName.getText().length()>2) {
+            public boolean onTouch(View v, MotionEvent event) {
+                //final int DRAWABLE_LEFT = 0;
+                //final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                //final int DRAWABLE_BOTTOM = 3;
 
-                    Intent intent = new Intent(getApplication(), ShareActivity.class);
-                    intent.putExtra("room_name", editAppointmentName.getText().toString());
-                    startActivity(intent);
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        //WaySocket.
+
+                        return true;
+                    }
                 }
-                else
-                    Snackbar.make(view, "먼저 상단의 모임 이름을 입력해 주세요!", Snackbar.LENGTH_LONG).show();
+                return false;
             }
         });
 
-        editAppointmentName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus)
-                    hideKeyboard(v);
-            }
-        });
-
-        editAppointmentName.addTextChangedListener(new TextWatcher() {
+        editAppointment.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override public void afterTextChanged(Editable editable) { }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (editAppointmentName.getText().length()>2){
-                    btnCreateName.setBackgroundColor(Color.DKGRAY);
+                if (editAppointment.getText().length()>2){
+                    btnShare.setVisibility(View.VISIBLE);
                 }else{
-                    btnCreateName.setBackgroundColor(Color.LTGRAY);
+                    btnShare.setVisibility(View.GONE);
                 }
             }
         });
+
+//        btnCreateName.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(editAppointmentName.getText().length()>2) {
+//
+//                    Intent intent = new Intent(getApplication(), ShareActivity.class);
+//                    intent.putExtra("room_name", editAppointmentName.getText().toString());
+//                    startActivity(intent);
+//                }
+//                else
+//                    Snackbar.make(view, "먼저 상단의 모임 이름을 입력해 주세요!", Snackbar.LENGTH_LONG).show();
+//            }
+//        });
+//
+//        editAppointmentName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus)
+//                    hideKeyboard(v);
+//            }
+//        });
+//
+//        editAppointmentName.addTextChangedListener(new TextWatcher() {
+//            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+//            @Override public void afterTextChanged(Editable editable) { }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if (editAppointmentName.getText().length()>2){
+//                    btnCreateName.setBackgroundColor(Color.DKGRAY);
+//                }else{
+//                    btnCreateName.setBackgroundColor(Color.LTGRAY);
+//                }
+//            }
+//        });
     }
 
     private void hideKeyboard(View view) {
