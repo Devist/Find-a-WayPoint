@@ -1,6 +1,7 @@
 package io.ssenbabies.findawaypoint.views;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -45,6 +47,7 @@ public class CreateActivity extends AppCompatActivity {
         setListener();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setListener(){
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,8 +65,9 @@ public class CreateActivity extends AppCompatActivity {
                 //final int DRAWABLE_BOTTOM = 3;
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getRawX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        //WaySocket.
+                    if(event.getX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        Log.d("소켓","방 생성 시도");
+                        WaySocket.getInstance().requestCreateRoom(editAppointment.getText().toString(),"");
 
                         return true;
                     }

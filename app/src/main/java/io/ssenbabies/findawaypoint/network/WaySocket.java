@@ -11,7 +11,7 @@ import io.socket.emitter.Emitter;
 public class WaySocket {
 
     private static String CONNECTION    = "CONNECTION";
-    private static String CREATE_ROOM   = "CREATE_ROOM";
+    private static String CREATE_ROOM   = "ROOM";
     private static String PICK          = "PICK";
     private static String COMPLETE      = "COMPLETE";
     private static String RELOAD_ROOM   = "RELOAD_ROOM";
@@ -28,13 +28,14 @@ public class WaySocket {
         try{
             mSocket = IO.socket("http://here-dot.kro.kr/");
             mSocket.connect();
+            //Log.d("소켓 ID : ", id);
 
             //이벤트 처리
             mSocket.on(CONNECTION, onConnectionResultReceived);
             mSocket.on(CREATE_ROOM,onCreateResultReceived);
-            mSocket.on(PICK,onPickResultReceived);
-            mSocket.on(COMPLETE,onCompleteResultReceived);
-            mSocket.on(RELOAD_ROOM,onReloadResultReceived);
+            //mSocket.on(PICK,onPickResultReceived);
+            //mSocket.on(COMPLETE,onCompleteResultReceived);
+            //mSocket.on(RELOAD_ROOM,onReloadResultReceived);
 
 
         }catch(Exception e){
@@ -43,11 +44,12 @@ public class WaySocket {
     }
 
     public void requestCreateRoom(String name, String msg){
+        Log.d("소켓 방 생성 요청 : ","성공");
         JSONObject data = new JSONObject();
         try {
-            data.put("room", "value1");
-            data.put("msg", "value2");
-            mSocket.emit(RELOAD_ROOM, data);
+            data.put("room", name);
+            data.put("msg", msg);
+            mSocket.emit(CREATE_ROOM, data);
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -123,7 +125,14 @@ public class WaySocket {
     private Emitter.Listener onCreateResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            Log.d("소켓 방 생성 결과 : ","결과받음");
+            // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
+            JSONObject receivedData = (JSONObject) args[0];
+            try{
+                Log.d("소켓 방 생성 결과 : ",receivedData.getString("room_name"));
+            }catch(Exception e){
 
+            }
         }
     };
 
