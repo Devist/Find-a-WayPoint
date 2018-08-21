@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint;
+package io.ssenbabies.findawaypoint.databases;
 
 /**
  * Created by xowns on 2018-08-18.
@@ -9,16 +9,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
+import java.util.List;
+
+import io.ssenbabies.findawaypoint.views.adapters.Room;
 
 /**
  * Created by xowns on 2018-08-10.
  */
 
-public class MySQLiteOpenHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
 
     int db_version;
     //안드로이드에서 SQLite 데이터 베이스를 쉽게 사용할 수 있도록 도와주는 클래스
-    public MySQLiteOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
 
         super(context, name, factory, version);
     }
@@ -27,8 +30,33 @@ public class MySQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //최초에 데이터베이스가 없는 경우, 데이터베이스 생성을 위해 호출됨
         //테이블을 생성하는 코드를 작성한다.
-        String sql = "CREATE TABLE search_table( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)";
-        db.execSQL(sql);
+
+        db.execSQL("CREATE TABLE APPOINTMENTS (_id TEXT PRIMARY KEY, _name TEXT, _place TEXT, _station TEXT, _ongoing INT(1) DEFAULT 0);");
+        db.execSQL("CREATE TABLE search_table( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
+    }
+
+    public void insertSampleRoom(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("INSERT INTO APPOINTMENTS(_id,_name,_place,_station,_ongoing) VALUES('60','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역',1);");
+        db.close();
+    }
+
+    public List<Room> getAppointments(){
+        SQLiteDatabase db = getReadableDatabase();
+        List<Room> rooms = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM APPOINTMENTS", null);
+
+        Room[] room = new Room[cursor.getColumnCount()];
+        while (cursor.moveToNext()) {
+           rooms.add(new Room( cursor.getString(0)
+                   ,cursor.getString(1)
+                   ,cursor.getString(2)
+                   ,cursor.getString(3)
+                   ,cursor.getInt(4)
+           ));
+        }
+        db.close();
+        return rooms;
     }
 
     @Override

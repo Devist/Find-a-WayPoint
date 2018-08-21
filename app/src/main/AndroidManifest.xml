@@ -3,6 +3,7 @@
     package="io.ssenbabies.findawaypoint">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -11,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".pages.SplashActivity"
+        <activity android:name=".views.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,12 +30,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".pages.MainActivity"/>
-        <activity android:name=".pages.CreateActivity"
+        <activity android:name=".views.MainActivity"/>
+        <activity android:name=".views.CreateActivity"
             android:windowSoftInputMode="adjustUnspecified"/>
-        <activity android:name=".pages.RoomActivity"/>
-        <activity android:name=".pages.ShareActivity"/>
-        <activity android:name=".pages.MapActivity"></activity>
+        <activity android:name=".views.RoomActivity"/>
+        <activity android:name=".views.ShareActivity"/>
+        <activity android:name=".views.MapActivity"></activity>
+        <activity android:name=".views.NameActivity"></activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

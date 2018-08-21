@@ -2,6 +2,9 @@
     <string name="app_name">중간지점 찾기</string>
 
     <string name="set_appointments">약속장소 정하기</string>
+    <string name="find_appointments">정하기 방 찾기</string>
+    <string name="find_appointments_hint">공유받은 위치공유방 태그를 입력하세요</string>
+
     <string name="kakao_app_key">e74ecc17512de3a13f47899e96e53fd2</string>
     <string name="kakao_scheme">kakaoe74ecc17512de3a13f47899e96e53fd2</string>
     <string name="kakaolink_host">kakaolink</string>

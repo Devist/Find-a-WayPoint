@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pages.MainActivity">
+    tools:context=".views.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:gravity="center"
-            android:layout_weight="3">
-            <Button
-                android:id="@+id/btnAddRoom"
-                android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_width="330dp"
+            android:background="@drawable/graphic"
+            android:orientation="vertical"
+            android:gravity="left|bottom"
+            android:layout_height="290dp">
+
+            <ImageView
+                android:layout_marginStart="35dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#888"
-                android:layout_margin="@dimen/fab_margin"
-                android:textColor="#fff"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="@string/set_appointments" />
+                android:src="@drawable/ic_name_log"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="40dp"
+                android:textSize="20sp"
+                android:textColor="#414042"
+                android:text="우리들의\n약속장소는\n여기닷"
+                />
         </LinearLayout>
 
 
-        <View
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="2"></View>
+            android:layout_height="wrap_content"
+            android:hint="코드 입력하기"
+            android:layout_marginStart="40dp"
+            android:drawableRight="@drawable/ic_pin_custom"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="4"
-            android:layout_height="0px"
+            android:layout_height="match_parent"
             android:padding="5dp"
+            android:gravity="bottom"
             android:layout_margin="10dp">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerRoomView"
@@ -51,6 +66,14 @@
 
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAddRoom"
+        app:backgroundTint="#f5a038"
+        android:layout_width="54.7dp"
+        android:layout_height="54.7dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add" />
 
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,15 +1,13 @@
-package io.ssenbabies.findawaypoint.pages;
+package io.ssenbabies.findawaypoint.views;
 
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,7 +23,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -47,14 +44,20 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
     private TextView tvPlaceDetails;
     private FloatingActionButton fabPickPlace;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
         Intent intent = getIntent();
-        lat = intent.getExtras().getFloat("MyLat");
-        lng = intent.getExtras().getFloat("MyLng");
+        try{
+            lat = intent.getExtras().getFloat("MyLat");
+            lng = intent.getExtras().getFloat("MyLng");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         initSettings();
         setLayout();
@@ -65,6 +68,7 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
 
         mapFragment.getMapAsync(this);
     }
+
 
     private void initSettings(){
         mGoogleApiClient = new GoogleApiClient

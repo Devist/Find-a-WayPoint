@@ -1,4 +1,4 @@
-package io.ssenbabies.findawaypoint;
+package io.ssenbabies.findawaypoint.views.adapters;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import io.ssenbabies.findawaypoint.DTO.GooglePlace;
+import io.ssenbabies.findawaypoint.R;
 
 /**
  * Created by xowns on 2018-08-09.
  */
 
-public class PlaceAdapter extends BaseAdapter {
+public class GooglePlaceAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private ArrayList<GooglePlace> placesArrayList;
     private Context context;
 
-    public PlaceAdapter(Context context, ArrayList<GooglePlace> placesArrayList) {
+    public GooglePlaceAdapter(Context context, ArrayList<GooglePlace> placesArrayList) {
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.placesArrayList = placesArrayList;
         this.context = context;
