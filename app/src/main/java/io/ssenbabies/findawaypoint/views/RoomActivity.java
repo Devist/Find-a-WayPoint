@@ -33,14 +33,12 @@ import io.ssenbabies.findawaypoint.R;
  * keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
  */
 
-public class RoomActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+public class RoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     float lat, lng; // 마커의 위도 경도
     Marker mark; // 시작 마커
     MarkerOptions markerOptions_start; // 시작 마커 설정값
     GoogleMap map; // 구글 맵
-    private GoogleApiClient mGoogleApiClient;
-    private int PLACE_PICKER_REQUEST = 1;
     private TextView tvPlaceDetails;
     private FloatingActionButton fabPickPlace;
 
@@ -59,7 +57,6 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
             e.printStackTrace();
         }
 
-        initSettings();
         setLayout();
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -70,82 +67,8 @@ public class RoomActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-    private void initSettings(){
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-    }
-
     private void setLayout() {
         fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
-        setListener();
-    }
-
-    private void setListener(){
-        fabPickPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                try {
-                    startActivityForResult(builder.build(RoomActivity.this), PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Snackbar.make(fabPickPlace, connectionResult.getErrorMessage() + "", Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
-
-            if (resultCode == RESULT_OK) {
-
-                Place place = PlacePicker.getPlace(data, this);
-                StringBuilder stBuilder = new StringBuilder();
-                String placename = String.format("%s", place.getName());
-                double latitude = place.getLatLng().latitude;
-                double longitude = place.getLatLng().longitude;
-                String address = String.format("%s", place.getAddress());
-                String phoneNumber = String.format("%s", place.getPhoneNumber());
-                String webSite = String.format("%s", place.getWebsiteUri());
-                String Star = String.format("%s", place.getRating());
-                String price = String.format("%s", place.getPriceLevel());
-                String type = String.format("%s", place.getPlaceTypes());
-
-                    LatLng latLng = new LatLng(latitude, longitude);
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title(placename);
-
-                    markerOptions.snippet(address);
-                    map.addMarker(markerOptions);
-
-                    map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    map.animateCamera(CameraUpdateFactory.zoomTo(15));
-            }
-        }
     }
 
     @Override

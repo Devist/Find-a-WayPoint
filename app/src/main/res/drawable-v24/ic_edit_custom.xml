@@ -2,9 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
 <item
-    android:drawable="@drawable/ic_pin"
-    android:width="35dp"
-    android:height="35dp"
+    android:drawable="@drawable/ic_edit"
     android:end="40dp"
     />
 

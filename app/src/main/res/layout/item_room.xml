@@ -3,14 +3,13 @@
     android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="19dp"
-    app:contentPaddingTop="20dp"
-    app:cardCornerRadius="5dp">
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#fafafc">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_marginTop="7dp"
         android:orientation="vertical">
 
         <!--<ImageView-->
@@ -20,84 +19,45 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/txtRoomTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:textSize="18sp"
+                android:layout_height="28dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="#000"
                 android:gravity="center"
                 android:text="넥스터즈_샌애기팀"
                 />
             <TextView
                 android:id="@+id/txtIsOnGoing"
                 android:layout_width="50dp"
-                android:layout_height="25dp"
-                android:textSize="16sp"
+                android:layout_height="28dp"
+                android:textSize="13sp"
                 android:gravity="center"
                 android:layout_marginStart="5dp"
                 android:text="진행중"
-                android:background="#AAAAAA"/>
+                android:textColor="@color/colorPrimaryDark"
+                android:background="#f5a038"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="right">
-
-            <Button
-                android:background="@drawable/ic_next"
-                android:layout_width="30dp"
-                android:layout_height="30dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="10">
-            <TextView
-                android:id="@+id/txtAppointmentPlaceTitle"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="약속장소"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/txtAppointmentPlaceContents"
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="| 서울 강남구 역삼동"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <TextView
             android:layout_marginTop="5dp"
-            android:weightSum="10">
-            <TextView
-                android:id="@+id/txtArroundStationTitle"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="주변역"
-                android:textStyle="bold"
-                />
-            <TextView
-                android:id="@+id/txtArroundStationContents"
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="| 강남역, 역삼역, 신논현역"
-                />
-        </LinearLayout>
+            android:id="@+id/txtRoomDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2018. 08. 41"
+            android:textSize="13sp"
+            />
+
+        <ImageView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#d1d3d4" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

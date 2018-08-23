@@ -35,12 +35,11 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         final Room room = rooms.get(position);
 
         holder.roomTitle.setText(room.getRoomTitle());
-        holder.appointmentPlaceContents.setText(room.getAppointmentPlaceContents());
-        holder.arroundStationContents.setText(room.getArroundStationContents());
+        holder.roomDate.setText(room.getRoomDate());
         if(room.getIsOnGoing()==1 )
             holder.txtIsOnGoing.setText("진행중 ");
         else
-            holder.txtIsOnGoing.setText("완료");
+            holder.txtIsOnGoing.setVisibility(View.INVISIBLE);
 
 //        holder.cardview.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -57,15 +56,13 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView roomTitle;
-        TextView appointmentPlaceContents;
-        TextView arroundStationContents;
+        TextView roomDate;
         TextView txtIsOnGoing;
 
         public ViewHolder(View itemView) {
             super(itemView);
             roomTitle = (TextView) itemView.findViewById(R.id.txtRoomTitle);
-            appointmentPlaceContents = (TextView) itemView.findViewById(R.id.txtAppointmentPlaceContents);
-            arroundStationContents = (TextView) itemView.findViewById(R.id.txtArroundStationContents);
+            roomDate = (TextView) itemView.findViewById(R.id.txtRoomDate);
             txtIsOnGoing = (TextView) itemView.findViewById(R.id.txtIsOnGoing);
 
         }

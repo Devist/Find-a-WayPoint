@@ -42,6 +42,8 @@ public class NameActivity extends AppCompatActivity {
             }
         });
 
+
+
         editName.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override public void afterTextChanged(Editable editable) { }
@@ -66,7 +68,7 @@ public class NameActivity extends AppCompatActivity {
                     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
                     prefs.edit().putBoolean("isFirstRun",false).apply();        //앱 최초 실행 값을 false로 변경하여, 다음 접속시 바로 MainActivity 가 열리도록 함.
                     prefs.edit().putString("name",name).apply();        //앱 최초 실행 값을 false로 변경하여, 다음 접속시 바로 MainActivity 가 열리도록 함.
-
+                    hideKeyboard(v);
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
