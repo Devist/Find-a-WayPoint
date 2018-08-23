@@ -6,11 +6,83 @@
     android:layout_height="match_parent"
     tools:context=".views.RoomActivity">
 
-    <fragment
-        android:id="@+id/map_choice"
-        class="com.google.android.gms.maps.MapFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="550dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/graphic_room"/>
+
+            <EditText
+                android:id="@+id/edit_appointment"
+                android:layout_width="match_parent"
+                android:textSize="25sp"
+                android:layout_alignBottom="@+id/image_view"
+                android:layout_marginStart="60dp"
+                android:paddingBottom="25dp"
+                android:hint="약속 이름 입력하기"
+                android:drawableRight="@drawable/ic_edit_custom"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <fragment
+            android:id="@+id/map_choice"
+            class="com.google.android.gms.maps.MapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="친구들이 출발위치를 입력중입니다"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:id="@+id/friend_top_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/friendView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+            </LinearLayout>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="장소 추천 받기"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:background="#76c5c3"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -8,7 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,7 +30,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import io.ssenbabies.findawaypoint.views.adapters.Friend;
+import io.ssenbabies.findawaypoint.views.adapters.FriendAdapter;
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.views.adapters.Room;
+import io.ssenbabies.findawaypoint.views.adapters.RoomAdapter;
 
 /* Use this to get SHA1 Key using CMD in Windows
  * keytool -list -v -keystore "%USERPROFILE%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
@@ -41,6 +52,9 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleMap map; // 구글 맵
     private TextView tvPlaceDetails;
     private FloatingActionButton fabPickPlace;
+
+    private LinearLayoutManager mFriendsTopViewManager;
+    private RecyclerView mFriendsView;
 
 
 
@@ -68,7 +82,31 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void setLayout() {
+        mFriendsView = (RecyclerView) findViewById(R.id.friendView);
 
+        // init LayoutManager
+        mFriendsTopViewManager = new LinearLayoutManager(this);
+        mFriendsTopViewManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+
+        mFriendsView.setLayoutManager(mFriendsTopViewManager);
+
+
+
+        Friend[] friend = new Friend[5];
+        friend[0] = new Friend(1,"오동환");
+        friend[1] = new Friend(0,"김태준");
+        friend[2] = new Friend(1,"이산하");
+        friend[3] = new Friend(0,"성락원");
+
+        List<Friend> friends = new ArrayList<>();
+
+        friends.add(friend[0]);
+        friends.add(friend[1]);
+        friends.add(friend[2]);
+        friends.add(friend[3]);
+
+
+        mFriendsView.setAdapter(new FriendAdapter(getApplicationContext(), friends, R.layout.activity_room));
     }
 
     @Override

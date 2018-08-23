@@ -66,6 +66,7 @@ public class CreateActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),MyLocationActivity.class);
                     intent.putExtra("roomCode", currentRoomCode);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -110,7 +111,7 @@ public class CreateActivity extends AppCompatActivity {
                             }
                         });
 
-                    }else if(status==WaySocket.SUCCESS){
+                    }else if(status==WaySocket.FAIL){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -128,6 +129,21 @@ public class CreateActivity extends AppCompatActivity {
 
             @Override
             public void onPickEventReceived(JSONObject result) {
+
+            }
+
+            @Override
+            public void onConnectionEventReceived() {
+
+            }
+
+            @Override
+            public void onReloadEventReceived(JSONObject result) {
+
+            }
+
+            @Override
+            public void onEntranceEventReceived(JSONObject result) {
 
             }
         });
