@@ -14,9 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,26 +31,30 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.ssenbabies.findawaypoint.views.adapters.GooglePlace;
-import io.ssenbabies.findawaypoint.views.adapters.GooglePlaceAdapter;
+import io.ssenbabies.findawaypoint.network.RetrofitService;
+import io.ssenbabies.findawaypoint.views.adapters.Place;
+import io.ssenbabies.findawaypoint.views.adapters.PlaceAdapter;
 import io.ssenbabies.findawaypoint.R;
-import noman.googleplaces.NRPlaces;
-import noman.googleplaces.Place;
-import noman.googleplaces.PlaceType;
-import noman.googleplaces.PlacesException;
-import noman.googleplaces.PlacesListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by xowns on 2018-08-09.
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener, LocationListener, View.OnClickListener, AdapterView.OnItemClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, View.OnClickListener, AdapterView.OnItemClickListener {
 
     float lat, lng; // 마커의 위도 경도
     Marker mark; // 시작 마커
@@ -57,13 +64,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     CircleOptions circle1KM; // 반경 1km
     Circle circle_now; // 현재 위치 반경
     CircleOptions circle1Km_now; // 현재 위치 반경 1km
-    Button btn_cafe, btn_restaurant, btn_alchol, btn_movie, btn_funny, btn_home;
-    int type = 1; // 장소 종류 default = 1 ( 카페 )
+    Button btn_cafe, btn_study, btn_restaurant, btn_alchol, btn_funny, btn_home;
     ListView listView; // 장소 출력 리스트뷰
-    ArrayList<GooglePlace> placesArrayList; // google place api로 받아온 장소 데이터
-    GooglePlaceAdapter adapter;
-    TextView tv_station1, tv_station2, tv_station3, roomName;
+    ArrayList<Place> placesArrayList; // google place api로 받아온 장소 데이터
+    PlaceAdapter adapter;
+    TextView tv_station_name1, tv_station_name2, tv_station_name3, tv_station_number1, tv_station_number2, tv_station_number3, roomName;
     String room;// 방 이름
+    RetrofitService service;
+    Spinner spinner;
+    private ArrayAdapter<CharSequence> adspin;
 
     ArrayList<Marker> previous_marker = new ArrayList<>();
     @Override
@@ -77,27 +86,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         room = intent.getStringExtra("room_name");
 
         btn_cafe = (Button) findViewById(R.id.btn_cafe);
-        btn_restaurant = (Button) findViewById(R.id.btn_restaraunt);
-        btn_funny = (Button) findViewById(R.id.btn_funny);
-        btn_movie = (Button) findViewById(R.id.btn_movie);
+        btn_study = (Button) findViewById(R.id.btn_study);
+        btn_restaurant = (Button) findViewById(R.id.btn_restaurant);
         btn_alchol = (Button) findViewById(R.id.btn_alchol);
+        btn_funny = (Button) findViewById(R.id.btn_funny);
         btn_home = (Button) findViewById(R.id.btn_home);
-        tv_station1 = (TextView) findViewById(R.id.tv_station1);
-        tv_station2 = (TextView) findViewById(R.id.tv_station2);
-        tv_station3 = (TextView) findViewById(R.id.tv_station3);
+
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+
+        tv_station_number1 = (TextView) findViewById(R.id.tv_station_number1);
+        tv_station_name1 = (TextView) findViewById(R.id.tv_station1);
+
+        tv_station_number2 = (TextView) findViewById(R.id.tv_station_number2);
+        tv_station_name2 = (TextView) findViewById(R.id.tv_station2);
+
+        tv_station_number3 = (TextView) findViewById(R.id.tv_station_number3);
+        tv_station_name3 = (TextView) findViewById(R.id.tv_station3);
         roomName = (TextView) findViewById(R.id.tv_room_name);
 
         roomName.setText(room);
 
         btn_cafe.setOnClickListener(this);
+        btn_study.setOnClickListener(this);
         btn_restaurant.setOnClickListener(this);
-        btn_funny.setOnClickListener(this);
-        btn_movie.setOnClickListener(this);
         btn_alchol.setOnClickListener(this);
+        btn_funny.setOnClickListener(this);
         btn_home.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.place_list);
-        placesArrayList = new ArrayList<GooglePlace>();
+        placesArrayList = new ArrayList<Place>();
 
         FragmentManager fragmentManager = getFragmentManager();
         MapFragment mapFragment = (MapFragment)fragmentManager
@@ -105,12 +123,92 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mapFragment.getMapAsync(this);
 
-        showPlaceInformation(new LatLng(lat, lng), type); //력 디폴트 장소인 카페 출
-
-        adapter = new GooglePlaceAdapter(this, placesArrayList);
+        adapter = new PlaceAdapter(this, placesArrayList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(this);
+
+        //주변 지하철역 정보
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://52.79.94.139:3000")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        service = retrofit.create(RetrofitService.class);
+
+        Call<JsonObject> staionCall = service.getStationData(
+                lat,
+                lng
+        );
+
+        //주변 역 정보 출력
+        staionCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if(response.isSuccessful()) {
+
+                    Log.d("mylat", String.valueOf(lat));
+                    Log.d("mylng", String.valueOf(lng));
+
+                    JsonObject object = response.body();
+
+                    if(object != null) {
+
+                        JsonParser jsonParser = new JsonParser();
+
+                        JsonObject stationObject = (JsonObject) jsonParser.parse(String.valueOf(object));
+
+                        JsonArray arr = (JsonArray) stationObject.get("stationInfo");
+
+                        for(int i=0; i<arr.size(); i++) {
+
+                            JsonObject station = (JsonObject) arr.get(i);
+                            Log.d("역 이름 : ", String.valueOf(station.get("stationName")));
+
+                            JsonArray lineNumberArray = (JsonArray) station.get("stationLineNumber");
+
+                            Log.d("역 호선 : ", String.valueOf(lineNumberArray.get(0)));
+
+                            String stationNumber = lineNumberArray.get(0).toString();
+                            String stationName = station.get("stationName").toString();
+
+                            String[] result_number = stationNumber.split("\"");
+                            String[] result_name = stationName.split("\"");
+
+                            if(result_number[1].equals("I")) result_number[1] = "인천1호선";
+                            else if(result_number[1].equals("K")) result_number[1] = "경의중앙선";
+                            else if(result_number[1].equals("B")) result_number[1] = "분당선";
+                            else if(result_number[1].equals("A")) result_number[1] = "공항철도";
+                            else if(result_number[1].equals("G")) result_number[1] = "경춘선";
+                            else if(result_number[1].equals("S")) result_number[1] = "신분당선";
+                            else if(result_number[1].equals("SU")) result_number[1] = "수인선";
+
+                            if(i==0) {
+                                tv_station_number1.setText(result_number[1]);
+                                tv_station_name1.setText(result_name[1]);
+                            }
+                            else if(i == 1) {
+                                tv_station_number2.setText(result_number[1]);
+                                tv_station_name2.setText(result_name[1]);
+                            }
+                            else if(i == 2){
+                                tv_station_number3.setText(result_number[1]);
+                                tv_station_name3.setText(result_name[1]);
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+
+        //디폴트 -> 카페, 거리순
+        getPlaceData(1,0, lat, lng);
+        btn_cafe.setTextColor(Color.parseColor("#414042"));
     }
 
     //현재 위치 받아오기
@@ -132,91 +230,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onProviderDisabled(String s) {
 
-    }
-
-
-    // 인자로 타입 줘서 rankby("distance") -> 거리순, 그냥 default가 평점순
-    public void showPlaceInformation(LatLng location, int type)
-    {
-        //  map.clear();//지도 클리어
-
-        if (previous_marker.size() != 0) {
-
-            for(int i=0; i < previous_marker.size(); i++) {
-                previous_marker.get(i).remove();
-            }
-
-            previous_marker.clear();//지역정보 마커 클리어
-        }
-
-        placesArrayList.clear(); // 리스트뷰 클리어
-
-        if(type == 1) { // 카페
-
-            Log.d("cafe", "cafe");
-            new NRPlaces.Builder()
-                    .listener(MapActivity.this)
-                    .key("AIzaSyC0IBPtDHrgMl-4VzCaTfo2TZmyniRVZ0Y")
-                    .latlng(lat, lng)//현재 위치
-                    .radius(500)
-                    .type(PlaceType.CAFE)
-                    .language("ko", "+82")
-                    .build()
-                    .execute();
-        }
-
-        else if(type == 2) { // 음식점
-
-            Log.d("food", "food");
-            new NRPlaces.Builder()
-                    .listener(MapActivity.this)
-                    .key("AIzaSyC0IBPtDHrgMl-4VzCaTfo2TZmyniRVZ0Y")
-                    .latlng(lat, lng)//현재 위치
-                    .radius(500) //500 미터 내에서 검색
-                    .type(PlaceType.RESTAURANT)
-                    .language("ko", "+82")
-                    .build()
-                    .execute();
-        }
-
-        else if(type == 3) { // 영화관
-
-            Log.d("movie", "movie");
-            new NRPlaces.Builder()
-                    .listener(MapActivity.this)
-                    .key("AIzaSyC0IBPtDHrgMl-4VzCaTfo2TZmyniRVZ0Y")
-                    .latlng(lat, lng)//현재 위치
-                    .radius(1000) //500 미터 내에서 검색
-                    .type(PlaceType.MOVIE_THEATER)
-                    .language("ko", "+82")
-                    .build()
-                    .execute();
-        }
-
-        else if(type == 4 ) {// 오락
-
-            Log.d("station", "station");
-            new NRPlaces.Builder()
-                    .listener(MapActivity.this)
-                    .key("AIzaSyC0IBPtDHrgMl-4VzCaTfo2TZmyniRVZ0Y")
-                    .latlng(lat, lng)//현재 위치
-                    .radius(2000)
-                    .type(PlaceType.AMUSEMENT_PARK)
-                    .language("ko", "+82")
-                    .build()
-                    .execute();
-        }
-
-        else { // 술집
-            new NRPlaces.Builder()
-                    .listener(MapActivity.this)
-                    .key("AIzaSyC0IBPtDHrgMl-4VzCaTfo2TZmyniRVZ0Y")
-                    .latlng(lat, lng)//현재 위치
-                    .radius(500) //500 미터 내에서 검색
-                    .type(PlaceType.NIGHT_CLUB)
-                    .build()
-                    .execute();
-        }
     }
 
     //Google Map Api
@@ -297,71 +310,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-
-    //Google Place Api
-    @Override
-    public void onPlacesFailure(PlacesException e) {
-
-        if (e.getMessage().equals("OVER_QUERY_LIMIT")) {
-
-            //2초 쉬고
-
-            //다시검색
-            //showPlaceInformation(new LatLng(lat, lng), type); // 다시 마커를 띄운다.
-        }
-
-        Log.d("onPlacesFaileure", e.getMessage());
-    }
-
-    @Override
-    public void onPlacesStart() {
-
-    }
-
-    //OVER_QUERY_LIMIT : 쿼리양이 하루 호출할 수 있는 횟수를 넘어감 없는것은 디비에 넣고 있는 것은 디비에서 가져오 도록 구현
-    @Override
-    public void onPlacesSuccess(final List<Place> places) {
-
-        //   final LinkedHashSet set = new LinkedHashSet<>(); // 역이름 중복제거
-
-        Log.d("onPlacesSuccess", "onPlacesSuccess");
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                //지도에 마커 찍기
-                for (noman.googleplaces.Place place : places) {
-
-                    LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
-                    String address = getAddress(getApplicationContext(), latLng.latitude, latLng.longitude);
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title(place.getName());
-
-                    markerOptions.snippet(address);
-                    Marker item = map.addMarker(markerOptions);
-                    previous_marker.add(item);
-
-                    //리스트뷰 에 담기
-                    placesArrayList.add(new GooglePlace(place.getLatitude(), place.getLongitude(), place.getName(), address, place.getTypes()[0]));
-                }
-
-                //리스트뷰 갱신
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
-    public void onPlacesFinished() {
-
-    }
-
     //버튼 클릭
     @Override
     public void onClick(View view) {
+
+        int type = 1; // 카페, 음식점, 스터디..
+        final int[] sort = new int[1]; // 거리순(0), 별점순(1)
+        sort[0] = 0; // default는 거리순
+
+        placesArrayList.clear();
+
+        btn_cafe.setTextColor(Color.parseColor("#d7d7d7"));
+        btn_study.setTextColor(Color.parseColor("#d7d7d7"));
+        btn_restaurant.setTextColor(Color.parseColor("#d7d7d7"));
+        btn_alchol.setTextColor(Color.parseColor("#d7d7d7"));
+        btn_funny.setTextColor(Color.parseColor("#d7d7d7"));
+
         switch(view.getId()) {
 
             //홈버튼
@@ -371,41 +335,65 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             case R.id.btn_cafe:
                 type = 1;
-                showPlaceInformation(new LatLng(lat, lng), type);
                 break;
 
-            case R.id.btn_restaraunt:
+            case R.id.btn_study:
                 type = 2;
-                showPlaceInformation(new LatLng(lat, lng), type);
                 break;
 
-            case R.id.btn_movie:
+            case R.id.btn_restaurant:
                 type = 3;
-                showPlaceInformation(new LatLng(lat, lng), type);
-                break;
-
-            case R.id.btn_funny:
-                type = 4;
-                showPlaceInformation(new LatLng(lat, lng), type);
                 break;
 
             case R.id.btn_alchol:
+                type = 4;
+                break;
+
+            case R.id.btn_funny:
                 type = 5;
-                showPlaceInformation(new LatLng(lat, lng), type);
                 break;
         }
+
+        //디폴트 거리순
+        if(type == 1) btn_cafe.setTextColor(Color.parseColor("#414042"));
+        if(type == 2) btn_study.setTextColor(Color.parseColor("#414042"));
+        if(type == 3) btn_restaurant.setTextColor(Color.parseColor("#414042"));
+        if(type == 4) btn_alchol.setTextColor(Color.parseColor("#414042"));
+        if(type == 5) btn_funny.setTextColor(Color.parseColor("#414042"));
+
+        getPlaceData(type, sort[0], lat, lng);
+
+        //spinner 선택 가능
+        adspin = ArrayAdapter.createFromResource(this, R.array.selected, android.R.layout.simple_spinner_item);
+
+        adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adspin);
+        final int finalType = type;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MapActivity.this, adspin.getItem(position) + "을 선택 했습니다.", Toast.LENGTH_SHORT).show();
+                sort[0] = position;
+
+                placesArrayList.clear();
+                getPlaceData(finalType, sort[0], lat, lng);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
     }
 
     //리스트뷰 클릭
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        GooglePlace item = (GooglePlace) adapter.getItem(i);
+        Place item = (Place) adapter.getItem(i);
 
         Marker place_mark;
-        double lat = item.getLat();
-        double lng = item.getLng();
-        String name = item.getName();
+        double lat = item.getPlaceLatitude();
+        double lng = item.getPlaceLongtitude();
+        String name = item.getPlaceName();
 
         LatLng place = new LatLng(lat, lng);
 
@@ -419,6 +407,64 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         map.moveCamera(CameraUpdateFactory.newLatLng(place));
         map.animateCamera(CameraUpdateFactory.zoomTo(15));
+    }
+
+
+    // 주변 장소 출력
+    void getPlaceData(int type,  int sort, double lat, double lng) {
+
+        Call<JsonObject> placeCall = service.getPlaceData(
+                type,
+                sort,
+                lat,
+                lng
+        );
+
+        placeCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                if(response.isSuccessful()) {
+
+                    JsonObject object = response.body();
+
+                    if(object != null) {
+
+                        JsonParser jsonParser = new JsonParser();
+
+                        JsonObject placeObject = (JsonObject) jsonParser.parse(String.valueOf(object));
+
+                        JsonArray arr = (JsonArray) placeObject.get("data");
+
+                        for(int i=0; i<arr.size(); i++) {
+
+                            JsonObject place = (JsonObject) arr.get(i);
+
+                            String placeName = place.get("placeName").toString();
+
+                            String[] result_name = placeName.split("\"");
+                            placeName = result_name[1];
+
+                            double placeLatitude = Double.parseDouble(place.get("placeLatitude").toString());
+                            double placeLongtitude = Double.parseDouble(place.get("placeLongtitude").toString());
+                            double placeRating = Double.parseDouble(place.get("placeRating").toString());
+
+                            placesArrayList.add(new Place(placeName, placeLatitude, placeLongtitude, placeRating));
+                            //    Log.d("장소 이름 : ", String.valueOf(place.get("placeName")));
+                            //    Log.d("위도  : ", String.valueOf(place.get("placeLatitude")));
+                           //     Log.d("경도  : ", String.valueOf(place.get("placeLongtitude")));
+                          //   Log.d("평점  : ", String.valueOf(place.get("placeRating")));
+                        }
+
+                        adapter.notifyDataSetChanged(); // 리스뷰 갱신
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 }
 

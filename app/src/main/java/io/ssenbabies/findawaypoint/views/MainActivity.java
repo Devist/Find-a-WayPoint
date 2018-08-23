@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DBHelper dbHelper;
 
-
+    private Button go;// 테스트를 위한 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,22 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
 
         setLayout();
+
+        go = (Button) findViewById(R.id.btn_go);
+
+        go.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch(v.getId()) {
+
+                    case R.id.btn_go:
+                        Intent intent = new Intent(MainActivity.this, ShareActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });
     }
 
     private void setLayout(){
@@ -72,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerRoomView.setHasFixedSize(true);
         recyclerRoomView.setLayoutManager(layoutManager);
-
 
         //dbHelper.insertSampleRoom();
 

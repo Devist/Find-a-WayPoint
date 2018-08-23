@@ -4,7 +4,9 @@ package io.ssenbabies.findawaypoint.views;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
@@ -58,6 +64,8 @@ public class CreateActivity extends AppCompatActivity {
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*
                 if(editAppointment.isEnabled()){
                     editAppointment.setEnabled(false);
                     editAppointment.setFocusable(false);
@@ -68,6 +76,39 @@ public class CreateActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
+                */
+
+                //공유하는 코드(라인, 카카오, 문자)
+                String subject = "방코드";
+                String text = "abcde@@!@#";
+
+                List targetedShareIntents = new ArrayList<>();
+
+                // 카카오톡
+                Intent kakaoIntent = getShareIntent("com.kakao.talk", subject, text);
+                if(kakaoIntent != null)
+                    targetedShareIntents.add(kakaoIntent);
+
+                //라인
+                Intent lineIntent = getShareIntent("jp.naver.line", subject, text);
+                if(lineIntent != null)
+                    targetedShareIntents.add(lineIntent);
+
+                //문자
+
+                Intent snsIntent = new Intent(Intent.ACTION_VIEW);
+                snsIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                snsIntent.putExtra(Intent.EXTRA_TEXT, text);
+                //  snsIntent.putExtra("subject", "방코드");
+                //  snsIntent.putExtra("text", "asd123$@");
+                snsIntent.setType("vnd.android-dir/mms-sms");
+
+                if(snsIntent != null)
+                    targetedShareIntents.add(snsIntent);
+
+                Intent chooser = Intent.createChooser((Intent) targetedShareIntents.remove(0), "방코드 공유하기");
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+                startActivity(chooser);
 
             }
         });
@@ -153,5 +194,35 @@ public class CreateActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
+    }
+
+    //방정보 공유를 위한 함수
+    private Intent getShareIntent(String name, String subject, String text) {
+        boolean found = false;
+
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+
+        // gets the list of intents that can be loaded.
+        List<ResolveInfo> resInfos = getPackageManager().queryIntentActivities(intent, 0);
+
+        if(resInfos == null || resInfos.size() == 0)
+            return null;
+
+        for (ResolveInfo info : resInfos) {
+            if (info.activityInfo.packageName.toLowerCase().contains(name) ||
+                    info.activityInfo.name.toLowerCase().contains(name) ) {
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.setPackage(info.activityInfo.packageName);
+                found = true;
+                break;
+            }
+        }
+
+        if (found)
+            return intent;
+
+        return null;
     }
 }
