@@ -31,6 +31,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
@@ -41,6 +43,8 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
 
     private GoogleApiClient mGoogleApiClient;
     private int PLACE_PICKER_REQUEST = 1;
+
+    private String currentRoomCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,9 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     private void init(){
+
+        currentRoomCode = getIntent().getStringExtra("roomCode");
+        Log.d("테스트_룸코드",currentRoomCode);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -71,6 +78,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         setListener();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setListener(){
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +97,18 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                     e.printStackTrace();
                 }
                 return false;
+            }
+        });
+
+        WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
+            @Override
+            public void onCreateResultReceived(JSONObject result) {
+
+            }
+
+            @Override
+            public void onPickEventReceived(JSONObject result) {
+                Log.d("테스트 픽 결과", result.toString());
             }
         });
 
@@ -114,6 +134,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("테스트 내 위치", "받음");
         if (requestCode == PLACE_PICKER_REQUEST) {
 
             if (resultCode == RESULT_OK) {
@@ -123,6 +144,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 String placename = String.format("%s", place.getName());
                 double latitude = place.getLatLng().latitude;
                 double longitude = place.getLatLng().longitude;
+                WaySocket.getInstance().requestPick(currentRoomCode, Double.toString(latitude),Double.toString(longitude));
                 String address = String.format("%s", place.getAddress());
                 String phoneNumber = String.format("%s", place.getPhoneNumber());
                 String webSite = String.format("%s", place.getWebsiteUri());

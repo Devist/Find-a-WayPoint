@@ -23,11 +23,11 @@ public class WaySocket {
 
     private io.socket.client.Socket mSocket;
 
-    public static View currentView;
 
     // 이벤트 등록 리스너
     public interface WaySocketListener {
-        public void onCreateResultReceived(View v, JSONObject result);
+        void onCreateResultReceived(JSONObject result);
+        void onPickEventReceived(JSONObject result);
     }
 
     private WaySocketListener listener;
@@ -53,7 +53,7 @@ public class WaySocket {
             //이벤트 처리
             mSocket.on(CONNECTION, onConnectionResultReceived);
             mSocket.on(CREATE_ROOM,onCreateResultReceived);
-            //mSocket.on(PICK,onPickResultReceived);
+            mSocket.on(PICK,onPickResultReceived);
             //mSocket.on(COMPLETE,onCompleteResultReceived);
             //mSocket.on(RELOAD_ROOM,onReloadResultReceived);
 
@@ -72,13 +72,13 @@ public class WaySocket {
             e.printStackTrace();
         }
     }
-    public void requestPick(){
+    public void requestPick(String room_code, String lat, String lng){
         JSONObject data = new JSONObject();
         try {
-            data.put("name", "value1");
-            data.put("room", "value2");
-            data.put("","");
-            mSocket.emit(RELOAD_ROOM, data);
+            data.put("room_code", room_code);
+            data.put("lat", lat);
+            data.put("long",lng);
+            mSocket.emit(PICK, data);
         } catch(JSONException e) {
             e.printStackTrace();
         }
@@ -145,7 +145,7 @@ public class WaySocket {
         public void call(Object... args) {
             JSONObject receivedData = (JSONObject) args[0];
             if(listener!=null)
-                listener.onCreateResultReceived(currentView, receivedData);
+                listener.onCreateResultReceived(receivedData);
 
         }
     };
@@ -153,7 +153,9 @@ public class WaySocket {
     private Emitter.Listener onPickResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-
+            JSONObject receivedData = (JSONObject) args[0];
+            if(listener!=null)
+                listener.onPickEventReceived(receivedData);
         }
     };
 

@@ -24,6 +24,7 @@ public class CreateActivity extends AppCompatActivity {
     private ImageButton btnCancel;
     private Button btnShare;
     private EditText editAppointment;
+    private String currentRoomCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,6 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
-        WaySocket.currentView = getCurrentFocus();
         setLayout();
     }
 
@@ -63,7 +63,9 @@ public class CreateActivity extends AppCompatActivity {
                     editAppointment.setFocusable(false);
                     btnShare.setText("약속하러 가기");
                 }else{
-                    startActivity(new Intent(getApplicationContext(),MyLocationActivity.class));
+                    Intent intent = new Intent(getApplicationContext(),MyLocationActivity.class);
+                    intent.putExtra("roomCode", currentRoomCode);
+                    startActivity(intent);
                 }
 
             }
@@ -91,15 +93,18 @@ public class CreateActivity extends AppCompatActivity {
         //방 생성 결과에 대한 리스너
         WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
             @Override
-            public void onCreateResultReceived(View v, JSONObject result) {
+            public void onCreateResultReceived(JSONObject result) {
                 hideKeyboard(getCurrentFocus());
 
                 try{
                     int status = result.getInt("status");
+
                     if(status==WaySocket.SUCCESS){
+                        currentRoomCode = result.getString("room_code");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 Snackbar.make(btnShare, "생성 완료! 공유하고 약속 장소를 정하러 가요", Snackbar.LENGTH_SHORT).show();
                                 btnShare.setVisibility(View.VISIBLE);
                             }
@@ -119,6 +124,11 @@ public class CreateActivity extends AppCompatActivity {
                     Snackbar.make(btnShare, "통신에 실패했습니다.", Snackbar.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onPickEventReceived(JSONObject result) {
+
             }
         });
     }

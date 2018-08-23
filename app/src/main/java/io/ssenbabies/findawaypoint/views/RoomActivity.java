@@ -68,7 +68,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void setLayout() {
-        fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
+
     }
 
     @Override
