@@ -49,9 +49,9 @@ public class NameActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (editName.getText().length()>1){
-                    btnCreateName.setBackgroundColor(Color.DKGRAY);
+                    btnCreateName.setBackgroundColor(Color.parseColor("#76c5c3"));
                 }else{
-                    btnCreateName.setBackgroundColor(Color.LTGRAY);
+                    btnCreateName.setBackgroundColor(Color.parseColor("#b3b3b3"));
                 }
             }
         });
