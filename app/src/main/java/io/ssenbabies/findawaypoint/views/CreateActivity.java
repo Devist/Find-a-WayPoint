@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import io.ssenbabies.findawaypoint.R;
@@ -24,7 +25,7 @@ import io.ssenbabies.findawaypoint.network.WaySocket;
 
 public class CreateActivity extends AppCompatActivity {
 
-    private TextView btnCancel;
+    private ImageButton btnCancel;
     private Button btnShare;
     private EditText editAppointment;
 
@@ -40,7 +41,7 @@ public class CreateActivity extends AppCompatActivity {
         Toolbar cancelToolbar = (Toolbar) findViewById(R.id.toolbarCancle);
         setSupportActionBar(cancelToolbar);
 
-        btnCancel = (TextView)findViewById(R.id.btnCancle);
+        btnCancel = (ImageButton)findViewById(R.id.btnCancle);
         editAppointment = (EditText)findViewById(R.id.edit_appointment);
         btnShare = (Button)findViewById(R.id.btn_share);
 

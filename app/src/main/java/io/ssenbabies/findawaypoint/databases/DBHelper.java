@@ -31,15 +31,17 @@ public class DBHelper extends SQLiteOpenHelper {
         //최초에 데이터베이스가 없는 경우, 데이터베이스 생성을 위해 호출됨
         //테이블을 생성하는 코드를 작성한다.
 
-        db.execSQL("CREATE TABLE APPOINTMENTS (_id TEXT PRIMARY KEY, _name TEXT, _place TEXT, _station TEXT, _ongoing INT(1) DEFAULT 0);");
+        db.execSQL("CREATE TABLE APPOINTMENTS (_id TEXT PRIMARY KEY, _name TEXT, _place TEXT, _station TEXT, _date TEXT, _members TEXT, _ongoing INT(1) DEFAULT 0);");
         db.execSQL("CREATE TABLE search_table( _id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
     }
 
     public void insertSampleRoom(){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO APPOINTMENTS(_id,_name,_place,_station,_ongoing) VALUES('60','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역',1);");
+        db.execSQL("INSERT INTO APPOINTMENTS VALUES('60','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역','2018. 04. 21','이윤희, 이은솔, 성락',1);");
         db.close();
     }
+
+
 
     public List<Room> getAppointments(){
         SQLiteDatabase db = getReadableDatabase();
@@ -50,9 +52,8 @@ public class DBHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
            rooms.add(new Room( cursor.getString(0)
                    ,cursor.getString(1)
-                   ,cursor.getString(2)
-                   ,cursor.getString(3)
-                   ,cursor.getInt(4)
+                   ,cursor.getString(4)
+                   ,cursor.getInt(6)
            ));
         }
         db.close();

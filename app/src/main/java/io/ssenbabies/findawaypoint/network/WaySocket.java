@@ -44,11 +44,9 @@ public class WaySocket {
     }
 
     public void requestCreateRoom(String name, String msg){
-        Log.d("소켓 방 생성 요청 : ","성공");
         JSONObject data = new JSONObject();
         try {
-            data.put("room", name);
-            data.put("msg", msg);
+            data.put("room_name", name);
             mSocket.emit(CREATE_ROOM, data);
         } catch(JSONException e) {
             e.printStackTrace();
@@ -130,8 +128,9 @@ public class WaySocket {
             JSONObject receivedData = (JSONObject) args[0];
             try{
                 Log.d("소켓 방 생성 결과 : ",receivedData.getString("room_name"));
+                Log.d("소켓 방 생성 결과 : ",receivedData.getString("msg"));
             }catch(Exception e){
-
+                Log.d("소켓 방 생성 실패 : ",receivedData.toString());
             }
         }
     };

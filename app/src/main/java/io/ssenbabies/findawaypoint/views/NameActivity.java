@@ -68,7 +68,7 @@ public class NameActivity extends AppCompatActivity {
                     prefs = getSharedPreferences("Pref", MODE_PRIVATE);
                     prefs.edit().putBoolean("isFirstRun",false).apply();        //앱 최초 실행 값을 false로 변경하여, 다음 접속시 바로 MainActivity 가 열리도록 함.
                     prefs.edit().putString("name",name).apply();        //앱 최초 실행 값을 false로 변경하여, 다음 접속시 바로 MainActivity 가 열리도록 함.
-
+                    hideKeyboard(v);
 
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();

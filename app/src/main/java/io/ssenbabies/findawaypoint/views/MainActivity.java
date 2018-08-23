@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     private void setLayout(){
         btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
         editCode = (EditText) findViewById(R.id.edit_code);
-//        btnFindRoom = (Button) findViewById(R.id.btnFindRoom);
 
         recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

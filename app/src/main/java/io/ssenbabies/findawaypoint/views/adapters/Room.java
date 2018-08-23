@@ -4,15 +4,13 @@ public class Room {
 
     private String roomID;
     private String roomTitle;
-    private String appointmentPlaceContents;
-    private String arroundStationContents;
+    private String roomDate;
     private int isOnGoing;
 
-    public Room(String roomID, String roomTitle, String appointmentPlaceContents, String arroundStationContents, int onGoing) {
+    public Room(String roomID, String roomTitle, String roomDate, int onGoing) {
         this.roomID = roomID;
         this.roomTitle = roomTitle;
-        this.appointmentPlaceContents = appointmentPlaceContents;
-        this.arroundStationContents = arroundStationContents;
+        this.roomDate = roomDate;
         this.isOnGoing = onGoing;
     }
 
@@ -22,12 +20,8 @@ public class Room {
         return roomTitle;
     }
 
-    public String getAppointmentPlaceContents() {
-        return appointmentPlaceContents;
-    }
-
-    public String getArroundStationContents() {
-        return arroundStationContents;
+    public String getRoomDate() {
+        return roomDate;
     }
 
     public int getIsOnGoing(){
