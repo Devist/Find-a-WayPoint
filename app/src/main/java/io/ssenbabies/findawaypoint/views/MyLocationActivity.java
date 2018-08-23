@@ -3,7 +3,10 @@ package io.ssenbabies.findawaypoint.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,21 +19,46 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
-public class MyLocationActivity extends AppCompatActivity {
+public class MyLocationActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private ImageButton btnCancel;
-    private Button btnShare;
-    private EditText editAppointment;
+    private EditText editMyLocation;
+
+    private GoogleApiClient mGoogleApiClient;
+    private int PLACE_PICKER_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mylocation);
+
+        init();
         setLayout();
+    }
+
+    private void init(){
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(this)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
+                .build();
     }
 
     private void setLayout(){
@@ -38,13 +66,11 @@ public class MyLocationActivity extends AppCompatActivity {
         setSupportActionBar(cancelToolbar);
 
         btnCancel = (ImageButton)findViewById(R.id.btnCancle);
-        editAppointment = (EditText)findViewById(R.id.edit_appointment);
-        btnShare = (Button)findViewById(R.id.btn_share);
+        editMyLocation = (EditText)findViewById(R.id.edit_mylocation);
 
         setListener();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void setListener(){
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,93 +79,59 @@ public class MyLocationActivity extends AppCompatActivity {
             }
         });
 
-        editAppointment.setOnTouchListener(new View.OnTouchListener() {
+        editMyLocation.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                //final int DRAWABLE_LEFT = 0;
-                //final int DRAWABLE_TOP = 1;
-                final int DRAWABLE_RIGHT = 2;
-                //final int DRAWABLE_BOTTOM = 3;
-
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.getX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        Log.d("소켓","방 생성 시도");
-                        WaySocket.getInstance().requestCreateRoom(editAppointment.getText().toString(),"");
-
-                        return true;
-                    }
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(MyLocationActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
                 }
                 return false;
             }
         });
 
-        editAppointment.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-            @Override public void afterTextChanged(Editable editable) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (editAppointment.getText().length()>2){
-                    btnShare.setVisibility(View.VISIBLE);
-                }else{
-                    btnShare.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editAppointment.isEnabled()){
-                    editAppointment.setEnabled(false);
-                    btnShare.setText("약속하러 가기");
-                    hideKeyboard(v);
-                }else{
-
-                }
-
-            }
-        });
-
-//        btnCreateName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(editAppointmentName.getText().length()>2) {
-//
-//                    Intent intent = new Intent(getApplication(), ShareActivity.class);
-//                    intent.putExtra("room_name", editAppointmentName.getText().toString());
-//                    startActivity(intent);
-//                }
-//                else
-//                    Snackbar.make(view, "먼저 상단의 모임 이름을 입력해 주세요!", Snackbar.LENGTH_LONG).show();
-//            }
-//        });
-//
-//        editAppointmentName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (!hasFocus)
-//                    hideKeyboard(v);
-//            }
-//        });
-//
-//        editAppointmentName.addTextChangedListener(new TextWatcher() {
-//            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-//            @Override public void afterTextChanged(Editable editable) { }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (editAppointmentName.getText().length()>2){
-//                    btnCreateName.setBackgroundColor(Color.DKGRAY);
-//                }else{
-//                    btnCreateName.setBackgroundColor(Color.LTGRAY);
-//                }
-//            }
-//        });
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Snackbar.make(getCurrentFocus(), connectionResult.getErrorMessage() + "", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+
+            if (resultCode == RESULT_OK) {
+
+                Place place = PlacePicker.getPlace(data, this);
+                StringBuilder stBuilder = new StringBuilder();
+                String placename = String.format("%s", place.getName());
+                double latitude = place.getLatLng().latitude;
+                double longitude = place.getLatLng().longitude;
+                String address = String.format("%s", place.getAddress());
+                String phoneNumber = String.format("%s", place.getPhoneNumber());
+                String webSite = String.format("%s", place.getWebsiteUri());
+                String Star = String.format("%s", place.getRating());
+                String price = String.format("%s", place.getPriceLevel());
+                String type = String.format("%s", place.getPlaceTypes());
+
+                LatLng latLng = new LatLng(latitude, longitude);
+            }
+        }
     }
 }
