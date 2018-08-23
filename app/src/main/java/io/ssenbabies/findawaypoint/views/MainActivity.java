@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerRoomView.setHasFixedSize(true);
         recyclerRoomView.setLayoutManager(layoutManager);
 
-
         //dbHelper.insertSampleRoom();
 
         List<Room> rooms = dbHelper.getAppointments();
