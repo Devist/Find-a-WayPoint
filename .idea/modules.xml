@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/Find-a-WayPoint.iml" filepath="$PROJECT_DIR$/Find-a-WayPoint.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/FindAWayPoint.iml" filepath="$PROJECT_DIR$/FindAWayPoint.iml" />
->>>>>>> e37da5cf90459d04553679557f0accd7c24facef
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

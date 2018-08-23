@@ -43,33 +43,59 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:textColor="#000000"
-                android:text ="가장 가까운 역 : "/>
+                android:text ="주변역 : "/>
 
+            <TextView
+                android:id="@+id/tv_station_number1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:text ="호선"/>
 
             <TextView
                 android:id="@+id/tv_station1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:textColor="#000000"
                 android:text ="역 이름"/>
+
+            <TextView
+                android:id="@+id/tv_station_number2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:text ="호선"/>
 
             <TextView
                 android:id="@+id/tv_station2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:textColor="#000000"
                 android:text ="역 이름"/>
+
+            <TextView
+                android:id="@+id/tv_station_number3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="#000000"
+                android:text ="호선"/>
 
             <TextView
                 android:id="@+id/tv_station3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:textColor="#000000"
                 android:text ="역 이름"/>
 
@@ -79,7 +105,7 @@
             android:id="@+id/map"
             class="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="340dp"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
 
@@ -95,46 +121,53 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#000000"
-                android:background="#A6A6A6"
+                android:textColor="#d7d7d7"
+                android:background="#ffffff"
                 android:text = "카페"/>
 
             <Button
-                android:id="@+id/btn_restaraunt"
+                android:id="@+id/btn_study"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#000000"
-                android:background="#A6A6A6"
+                android:textColor="#d7d7d7"
+                android:background="#ffffff"
+                android:text = "스터디"/>
+
+            <Button
+                android:id="@+id/btn_restaurant"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#d7d7d7"
+                android:background="#ffffff"
                 android:text = "식사"/>
-
-            <Button
-                android:id="@+id/btn_movie"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#000000"
-                android:background="#A6A6A6"
-                android:text = "영화관"/>
-
-            <Button
-                android:id="@+id/btn_funny"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#000000"
-                android:background="#A6A6A6"
-                android:text = "오락"/>
 
             <Button
                 android:id="@+id/btn_alchol"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#000000"
-                android:background="#A6A6A6"
-                android:text = "술집"/>
+                android:textColor="#d7d7d7"
+                android:background="#ffffff"
+                android:text = "술"/>
+
+            <Button
+                android:id="@+id/btn_funny"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#d7d7d7"
+                android:background="#ffffff"
+                android:text = "오락 문화"/>
         </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:background="#f4f4f4"
+            android:paddingLeft="17.3dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"></Spinner>
 
         <ListView
             android:id="@+id/place_list"

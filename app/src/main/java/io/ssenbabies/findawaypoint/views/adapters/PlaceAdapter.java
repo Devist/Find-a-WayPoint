@@ -13,18 +13,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.views.MapActivity;
 
 /**
  * Created by xowns on 2018-08-09.
  */
 
-public class GooglePlaceAdapter extends BaseAdapter {
+public class PlaceAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
-    private ArrayList<GooglePlace> placesArrayList;
+    private ArrayList<Place> placesArrayList;
     private Context context;
 
-    public GooglePlaceAdapter(Context context, ArrayList<GooglePlace> placesArrayList) {
+    public PlaceAdapter(Context context, ArrayList<Place> placesArrayList) {
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.placesArrayList = placesArrayList;
         this.context = context;
@@ -56,16 +57,16 @@ public class GooglePlaceAdapter extends BaseAdapter {
         //화면에 표시될 View(Layout이 inflate된) 으로 부터 위젝에 대한 참조 획득
         final TextView tv_name = (TextView) view.findViewById(R.id.name);
         TextView tv_addr = (TextView) view.findViewById(R.id.addr);
-        TextView tv_type = (TextView) view.findViewById(R.id.type);
+        TextView tv_rating = (TextView) view.findViewById(R.id.rating);
         Button btn_search = (Button) view.findViewById(R.id.btn_search);
 
         // Data Set에서 position에 위치한 데이터 참조 획득
-        GooglePlace place = placesArrayList.get(i);
+        Place place = placesArrayList.get(i);
 
         //아이템 내 각 위젝에 데이터 반영
-        tv_name.setText(place.getName());
-        tv_addr.setText(place.getAddr());
-        tv_type.setText(place.getType());
+        tv_name.setText(place.getPlaceName());
+        tv_addr.setText(MapActivity.getAddress(context,place.getPlaceLatitude(), place.getPlaceLongtitude()));
+        tv_rating.setText(Double.toString(place.getPlaceRating()));
 
         btn_search.setOnClickListener(new Button.OnClickListener() {
             @Override
