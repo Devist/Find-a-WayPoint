@@ -3,11 +3,16 @@ package io.ssenbabies.findawaypoint.views.adapters;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,8 +62,12 @@ public class PlaceAdapter extends BaseAdapter {
         //화면에 표시될 View(Layout이 inflate된) 으로 부터 위젝에 대한 참조 획득
         final TextView tv_name = (TextView) view.findViewById(R.id.name);
         TextView tv_addr = (TextView) view.findViewById(R.id.addr);
-        TextView tv_rating = (TextView) view.findViewById(R.id.rating);
         Button btn_search = (Button) view.findViewById(R.id.btn_search);
+        RatingBar rating = (RatingBar) view.findViewById(R.id.ratingBar);
+        Drawable drawable = rating.getProgressDrawable();
+        drawable.setColorFilter(Color.parseColor("#ffc524"), PorterDuff.Mode.SRC_ATOP);
+
+        rating.setStepSize((float) 1.0);
 
         // Data Set에서 position에 위치한 데이터 참조 획득
         Place place = placesArrayList.get(i);
@@ -66,8 +75,11 @@ public class PlaceAdapter extends BaseAdapter {
         //아이템 내 각 위젝에 데이터 반영
         tv_name.setText(place.getPlaceName());
         tv_addr.setText(MapActivity.getAddress(context,place.getPlaceLatitude(), place.getPlaceLongtitude()));
-        tv_rating.setText(Double.toString(place.getPlaceRating()));
 
+        rating.setRating((float) place.getPlaceRating());
+
+
+        //int Star = (int) Math.round(placeRating); // 평점 반올림
         btn_search.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
