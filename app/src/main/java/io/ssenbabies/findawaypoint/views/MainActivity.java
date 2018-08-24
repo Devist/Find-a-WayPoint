@@ -65,9 +65,19 @@ public class MainActivity extends AppCompatActivity {
 
         btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
         editCode = (EditText) findViewById(R.id.edit_code);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
         recyclerRoomView.setHasFixedSize(true);
+        recyclerRoomView.setLayoutManager(layoutManager);
         recyclerRoomView.setAdapter(new RoomAdapter(getApplicationContext(), rooms, R.layout.activity_main));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        setListener(); // Edittext 내 코드 찾기 버튼이 다시 눌리지 않아 적용
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -105,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     if(event.getRawX() >= (editCode.getRight() - editCode.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // 아래의 setWaySocketListener의 onReloadEventReceived 로 결과값 들어옴
                         WaySocket.getInstance().requestReloadRoom(editCode.getText().toString());
-                        return true;
+                        return false;
                     }
                 }
                 return false;

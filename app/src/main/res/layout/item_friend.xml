@@ -2,30 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    >
 
     <RelativeLayout
-        android:background="#eaeaea"
-        android:layout_width="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/horizon_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/ic_launcher" />
+        android:background="#FFF"
+        android:layout_width="60dp"
+        android:layout_height="60dp">
 
         <TextView
             android:id="@+id/horizon_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="#FFF"
-            android:background="#000"
-            android:layout_below="@+id/horizon_icon"
-            android:text="@string/app_name" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="이윤희"
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold"
+            android:textColor="#cc485a58"
+            android:gravity="center"
+            android:background="@drawable/tv_friend"/>
+
+        <ImageView
+            android:id="@+id/horizon_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_done"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            />
 
     </RelativeLayout>
 
