@@ -93,7 +93,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btn_home = (Button) findViewById(R.id.btn_home);
 
         spinner = (Spinner) findViewById(R.id.spinner);
+        adspin = ArrayAdapter.createFromResource(this, R.array.selected, android.R.layout.simple_spinner_item);
+        adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adspin);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MapActivity.this, adspin.getItem(position) + "을 선택 했습니다.", Toast.LENGTH_SHORT).show();
+
+                placesArrayList.clear();
+                getPlaceData(1, position, lat, lng);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         tv_station_number1 = (TextView) findViewById(R.id.tv_station_number1);
         tv_station_name1 = (TextView) findViewById(R.id.tv_station1);
@@ -335,22 +349,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             case R.id.btn_cafe:
                 type = 1;
+                spinner.setSelection(0);
                 break;
 
             case R.id.btn_study:
                 type = 2;
+                spinner.setSelection(0);
                 break;
 
             case R.id.btn_restaurant:
                 type = 3;
+                spinner.setSelection(0);
                 break;
 
             case R.id.btn_alchol:
                 type = 4;
+                spinner.setSelection(0);
                 break;
 
             case R.id.btn_funny:
                 type = 5;
+                spinner.setSelection(0);
                 break;
         }
 
@@ -364,10 +383,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getPlaceData(type, sort[0], lat, lng);
 
         //spinner 선택 가능
-        adspin = ArrayAdapter.createFromResource(this, R.array.selected, android.R.layout.simple_spinner_item);
-
-        adspin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adspin);
         final int finalType = type;
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
