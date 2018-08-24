@@ -85,11 +85,10 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFriendsView = (RecyclerView) findViewById(R.id.friendView);
 
         // init LayoutManager
-        mFriendsTopViewManager = new LinearLayoutManager(this);
-        mFriendsTopViewManager.setOrientation(LinearLayoutManager.HORIZONTAL); // 기본값이 VERTICAL
+        mFriendsTopViewManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
 
         mFriendsView.setLayoutManager(mFriendsTopViewManager);
-
+        mFriendsView.setHasFixedSize(true);
 
 
         Friend[] friend = new Friend[5];
