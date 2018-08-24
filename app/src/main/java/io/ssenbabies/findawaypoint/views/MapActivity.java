@@ -9,6 +9,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -74,6 +77,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RetrofitService service;
     Spinner spinner;
     private ArrayAdapter<CharSequence> adspin;
+    LinearLayout layout; // 지하철역 동적으로 생성하기 위한 레이아웃
 
     ArrayList<Marker> previous_marker = new ArrayList<>();
     @Override
@@ -85,6 +89,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         lat = intent.getExtras().getFloat("MyLat");
         lng = intent.getExtras().getFloat("MyLng");
         room = intent.getStringExtra("room_name");
+
+        Log.d("Location_lat", String.valueOf(lat));
+        Log.d("Location_lng", String.valueOf(lng));
 
         btn_cafe = (Button) findViewById(R.id.btn_cafe);
         btn_study = (Button) findViewById(R.id.btn_study);
@@ -110,14 +117,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        tv_station_number1 = (TextView) findViewById(R.id.tv_station_number1);
-        tv_station_name1 = (TextView) findViewById(R.id.tv_station1);
+        //지하철 역 정보 동적으로 생성
+        //지하철 이미지와 TextView가 추가될 layout
+        layout = (LinearLayout) findViewById(R.id.subway_layout);
 
-        tv_station_number2 = (TextView) findViewById(R.id.tv_station_number2);
-        tv_station_name2 = (TextView) findViewById(R.id.tv_station2);
-
-        tv_station_number3 = (TextView) findViewById(R.id.tv_station_number3);
-        tv_station_name3 = (TextView) findViewById(R.id.tv_station3);
         tv_location = (TextView) findViewById(R.id.tv_location);
 
         tv_location.setText(getAddress(MapActivity.this, lat, lng));
@@ -207,59 +210,82 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                             JsonArray lineNumberArray = (JsonArray) station.get("stationLineNumber");
 
-                            ArrayList<String> line_number_list =  new ArrayList<>();
+                            String stationName = station.get("stationName").toString();
+                            String[] result_name = stationName.split("\"");
 
-                            // " 를 기준으로 스프링 파싱
+                            ArrayList<String> line_number_list =  new ArrayList<>();
+                            // " 를 기준으로 스트링 파싱
                             for(int j=0; j<lineNumberArray.size(); j++) {
 
                                 String line_number = lineNumberArray.get(j).toString();
                                 String[] result_line_number = line_number.split("\"");
-
                                 line_number_list.add(String.valueOf(result_line_number[1]));
                             }
 
-                            String stationName = station.get("stationName").toString();
-
-                            String[] result_name = stationName.split("\"");
-
                             for(int j=0; j<line_number_list.size(); j++) {
 
+                                if(line_number_list.get(j).equals("A")) line_number_list.set(j, "공항철도");
+                                if(line_number_list.get(j).equals("B")) line_number_list.set(j, "분당선");
+                                if(line_number_list.get(j).equals("E")) line_number_list.set(j, "용인경전철");
+                                if(line_number_list.get(j).equals("G")) line_number_list.set(j, "경춘선");
                                 if(line_number_list.get(j).equals("I")) line_number_list.set(j, "인천1호선");
-                                else if(line_number_list.get(j).equals("K")) line_number_list.set(j,"경의중앙선");
-                                else if(line_number_list.get(j).equals("B")) line_number_list.set(j, "분당선");
-                                else if(line_number_list.get(j).equals("A")) line_number_list.set(j, "공항철도");
-                                else if(line_number_list.get(j).equals("G")) line_number_list.set(j, "경춘선");
-                                else if(line_number_list.get(j).equals("S")) line_number_list.set(j, "신분당선");
-                                else if(line_number_list.get(j).equals("SU")) line_number_list.set(j, "수인선");
+                                if(line_number_list.get(j).equals("I2")) line_number_list.set(j, "인천2호선");
+                                if(line_number_list.get(j).equals("K")) line_number_list.set(j,"경의중앙선");
+                                if(line_number_list.get(j).equals("KK")) line_number_list.set(j,"경강선");
+                                if(line_number_list.get(j).equals("S")) line_number_list.set(j, "신분당선");
+                                if(line_number_list.get(j).equals("SU")) line_number_list.set(j, "수인선");
+                                if(line_number_list.get(j).equals("U")) line_number_list.set(j,"의정부경전철");
                             }
 
                             //지하철역이 여러개의 호선일 경우 처리
-                            String result = " ";
 
-                            if(i==0) {
                                 for(int j=0; j<line_number_list.size(); j++) {
-                                    result += line_number_list.get(j);
-                                    result += ",";
+
+                                //지하철역이 해당되는 호선 이미지
+                                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                        ImageView img = new ImageView(MapActivity.this);
+
+                                        if(line_number_list.get(j).equals("1")) img.setImageResource(R.drawable.line_1);
+                                        if(line_number_list.get(j).equals("2")) img.setImageResource(R.drawable.line_2);
+                                        if(line_number_list.get(j).equals("3")) img.setImageResource(R.drawable.line_3);
+                                        if(line_number_list.get(j).equals("4")) img.setImageResource(R.drawable.line_4);
+                                        if(line_number_list.get(j).equals("5")) img.setImageResource(R.drawable.line_5);
+                                        if(line_number_list.get(j).equals("6")) img.setImageResource(R.drawable.line_6);
+                                        if(line_number_list.get(j).equals("7")) img.setImageResource(R.drawable.line_7);
+                                        if(line_number_list.get(j).equals("8")) img.setImageResource(R.drawable.line_8);
+                                        if(line_number_list.get(j).equals("9")) img.setImageResource(R.drawable.line_9);
+                                        if(line_number_list.get(j).equals("인천1호선")) img.setImageResource(R.drawable.line_10);
+                                        if(line_number_list.get(j).equals("인천2호선")) img.setImageResource(R.drawable.line_11);
+                                        if(line_number_list.get(j).equals("분당선")) img.setImageResource(R.drawable.line_12);
+                                        if(line_number_list.get(j).equals("신분당선")) img.setImageResource(R.drawable.line_13);
+                                        if(line_number_list.get(j).equals("경의중앙선")) img.setImageResource(R.drawable.line_14);
+                                        if(line_number_list.get(j).equals("경춘선")) img.setImageResource(R.drawable.line_15);
+                                        if(line_number_list.get(j).equals("공항철도")) img.setImageResource(R.drawable.line_16);
+                                        if(line_number_list.get(j).equals("의정부경전철")) img.setImageResource(R.drawable.line_17);
+                                        if(line_number_list.get(j).equals("수인선")) img.setImageResource(R.drawable.line_18);
+                                        if(line_number_list.get(j).equals("용인경전철")) img.setImageResource(R.drawable.line_19);
+                                        if(line_number_list.get(j).equals("자기부상")) img.setImageResource(R.drawable.line_20);
+                                        if(line_number_list.get(j).equals("경강선")) img.setImageResource(R.drawable.line_21);
+                                        if(line_number_list.get(j).equals("우아신설")) img.setImageResource(R.drawable.line_22);
+                                        if(line_number_list.get(j).equals("서해")) img.setImageResource(R.drawable.line_23);
+
+                                        lp.setMargins(0,0,3,0);
+                                        img.setLayoutParams(lp);
+                                        layout.addView(img);
                                 }
-                                tv_station_number1.setText(result);
-                                tv_station_name1.setText(result_name[1]);
-                            }
-                            else if(i == 1) {
-                                for(int j=0; j<line_number_list.size(); j++) {
-                                    result += line_number_list.get(j);
-                                    result += ",";
-                                }
-                                tv_station_number2.setText(result);
-                                tv_station_name2.setText(result_name[1]);
-                            }
-                            else if(i == 2){
-                                for(int j=0; j<line_number_list.size(); j++) {
-                                    result += line_number_list.get(j);
-                                    result += ",";
-                                }
-                                tv_station_number3.setText(result);
-                                tv_station_name3.setText(result_name[1]);
-                            }
+
+                                //지하철 역 이름
+                                TextView tv = new TextView(MapActivity.this);
+
+                                result_name[1] = result_name[1].substring(0, result_name[1].length() - 1);
+                                tv.setText(result_name[1]);
+                                // layout param 설정
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                lp.setMargins(0,0,15,0);
+                                tv.setLayoutParams(lp);
+
+                                //부모 뷰에 추가
+                                layout.addView(tv);
                         }
                     }
                 }

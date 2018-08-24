@@ -20,24 +20,25 @@
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="87.7dp"
-                android:layout_marginBottom="14.6dp"
                 android:layout_centerHorizontal="true"
-                android:text = "현재 위치"
-                android:textSize = "16.7sp"
-                android:textColor = "#414042"></TextView>
+                android:layout_marginBottom="14.6dp"
+                android:layout_marginTop="87.7dp"
+                android:text="현재 위치"
+                android:textColor="#414042"
+                android:textSize="16.7sp"></TextView>
 
             <Button
-                android:background="@drawable/ic_home"
                 android:id="@+id/btn_home"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop = "40dp"
-                android:layout_marginRight="20dp"
                 android:layout_width="35.3dp"
-                android:layout_height="37.7dp" />
+                android:layout_height="37.7dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/ic_home" />
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/subway_layout"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginBottom="18.7dp"
@@ -45,73 +46,13 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
+                android:layout_width="40dp"
+                android:layout_height="19dp"
+                android:layout_marginRight="7dp"
+                android:text = "주변역"
+                android:textSize="13sp"
                 android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="주변역 : "/>
-
-            <TextView
-                android:id="@+id/tv_station_number1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="호선"/>
-
-            <TextView
-                android:id="@+id/tv_station1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="역 이름"/>
-
-            <TextView
-                android:id="@+id/tv_station_number2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="호선"/>
-
-            <TextView
-                android:id="@+id/tv_station2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="역 이름"/>
-
-            <TextView
-                android:id="@+id/tv_station_number3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="호선"/>
-
-            <TextView
-                android:id="@+id/tv_station3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:textColor="#414042"
-                android:textSize = "13dp"
-                android:text ="역 이름"/>
+                ></TextView>
 
         </LinearLayout>
 
