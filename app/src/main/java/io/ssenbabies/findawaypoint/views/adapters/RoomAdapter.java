@@ -2,19 +2,23 @@ package io.ssenbabies.findawaypoint.views.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     Context context;
     List<Room> rooms;
     int item_layout;
+    DBHelper dbHelper;
 
     public RoomAdapter(Context context, List<Room> rooms, int item_layout) {
         this.context = context;
@@ -32,6 +36,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        dbHelper = new DBHelper(holder.itemView.getContext(), "MyInfo.db", null, 1);
         final Room room = rooms.get(position);
 
         holder.roomTitle.setText(room.getRoomTitle());
@@ -41,12 +46,14 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
         else
             holder.txtIsOnGoing.setVisibility(View.INVISIBLE);
 
-//        holder.cardview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, room.getRoomID(), Toast.LENGTH_SHORT).show();
+                //String[] result = dbHelper.getDetailAppointment(room.getRoomID());
+                //Log.d("로컬 디비 테스트", result.toString());
+            }
+        });
     }
 
     @Override

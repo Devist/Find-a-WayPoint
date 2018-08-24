@@ -22,13 +22,13 @@
                 android:src="@drawable/graphic_room"/>
 
             <EditText
-                android:id="@+id/edit_appointment"
+                android:id="@+id/my_appointment"
                 android:layout_width="match_parent"
                 android:textSize="25sp"
                 android:layout_alignBottom="@+id/image_view"
                 android:layout_marginStart="60dp"
                 android:paddingBottom="25dp"
-                android:hint="약속 이름 입력하기"
+                android:clickable="false"
                 android:drawableRight="@drawable/ic_edit_custom"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

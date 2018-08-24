@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,7 +47,8 @@ import io.ssenbabies.findawaypoint.views.adapters.RoomAdapter;
 
 public class RoomActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    float lat, lng; // 마커의 위도 경도
+    private double lat, lng; // 마커의 위도 경도
+
     Marker mark; // 시작 마커
     MarkerOptions markerOptions_start; // 시작 마커 설정값
     GoogleMap map; // 구글 맵
@@ -56,6 +58,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LinearLayoutManager mFriendsTopViewManager;
     private RecyclerView mFriendsView;
 
+    private EditText myPlace;
 
 
     @Override
@@ -72,16 +75,13 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         setLayout();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        MapFragment mapFragment = (MapFragment)fragmentManager
-                .findFragmentById(R.id.map_choice);
-
-        mapFragment.getMapAsync(this);
+        setListener();
     }
 
 
     private void setLayout() {
+        myPlace = (EditText) findViewById(R.id.my_appointment);
+        myPlace.setText(getIntent().getStringExtra("place"));
         mFriendsView = (RecyclerView) findViewById(R.id.friendView);
 
         // init LayoutManager
@@ -104,10 +104,17 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         friends.add(friend[2]);
         friends.add(friend[3]);
 
-
         mFriendsView.setAdapter(new FriendAdapter(getApplicationContext(), friends, R.layout.activity_room));
+
+        //지도 레이아웃 설정
+        FragmentManager fragmentManager = getFragmentManager();
+        MapFragment mapFragment = (MapFragment)fragmentManager.findFragmentById(R.id.map_choice);
+        mapFragment.getMapAsync(this);
     }
 
+    private void setListener(){
+
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -120,7 +127,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         MarkerOptions markerOptions_my = new MarkerOptions();
         markerOptions_my.position(My);
         markerOptions_my.title("나의 위치");
-        // markerOptions_my.draggable(true); // 드래그 할 수 있게함
+        markerOptions_my.draggable(true); // 드래그 할 수 있게함
         markerOptions_my.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.now)));
         markerOptions_my.snippet(my_address);
 

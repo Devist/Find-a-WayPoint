@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
         requestPermission();
         WaySocket.getInstance();
-        //dbHelper.insertSampleRoom();
+        dbHelper.insertSampleRoom();
     }
 
     private void setLayout(){

@@ -64,8 +64,8 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         userName = prefs.getString("name","anonymous");
 
         Log.d("테스트_룸코드",currentRoomCode + "a");
-
         WaySocket.getInstance().requestEntrance(currentRoomCode, userName);
+
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -145,13 +145,17 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 Log.d("테스트","진입");
                 Place place = PlacePicker.getPlace(data, this);
                 StringBuilder stBuilder = new StringBuilder();
-                String placename = String.format("%s", place.getName());
+                String placeName = String.format("%s", place.getName());
                 double latitude = place.getLatLng().latitude;
                 double longitude = place.getLatLng().longitude;
                 WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude,"");
 
                 //임시코드
-                startActivity(new Intent(getApplicationContext(), RoomActivity.class));
+                Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
+                intent.putExtra("place", placeName);
+                intent.putExtra("lat",latitude);
+                intent.putExtra("lng",longitude);
+                startActivity(intent);
             }
         }
     }

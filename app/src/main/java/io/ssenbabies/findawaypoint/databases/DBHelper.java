@@ -37,7 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void insertSampleRoom(){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO APPOINTMENTS VALUES('60','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역','2018. 04. 21','이윤희, 이은솔, 성락',1);");
+        db.execSQL("INSERT INTO APPOINTMENTS VALUES('70','샌애기팀 모임','서울 강남구 역삼동','강남역,역삼역','2018. 04. 21','이윤희, 이은솔, 성락',0);");
+        db.execSQL("INSERT INTO APPOINTMENTS VALUES('60','오늘저녁은 치킨이닭','서울 강남구 역삼동','강남역,역삼역','2018. 04. 21','이윤희, 이은솔, 성락',1);");
         db.close();
     }
 
@@ -58,6 +59,19 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         db.close();
         return rooms;
+    }
+
+    public String[] getDetailAppointment(String room_code){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] result = new String[7];
+        Cursor cursor = db.rawQuery("SELECT * FROM APPOINTMENTS WHERE _id= ?", new String[]{room_code});
+
+        for(int i = 0 ;i<7; i++){
+            result[0] = cursor.getString(0);
+        }
+
+        db.close();
+        return result;
     }
 
     @Override
