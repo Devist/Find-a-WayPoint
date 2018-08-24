@@ -87,7 +87,7 @@ public class CreateActivity extends AppCompatActivity {
                 //final int DRAWABLE_LEFT = 0;
                 //final int DRAWABLE_TOP = 1;
                 final int DRAWABLE_RIGHT = 2;
-                //final int DRAWABLE_BOTTOM = 3;
+                //final int DRAWABLE_BOTTOM = line_3;
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
