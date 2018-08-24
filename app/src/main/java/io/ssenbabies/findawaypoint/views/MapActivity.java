@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +69,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ListView listView; // 장소 출력 리스트뷰
     ArrayList<Place> placesArrayList; // google place api로 받아온 장소 데이터
     PlaceAdapter adapter;
-    TextView tv_station_name1, tv_station_name2, tv_station_name3, tv_station_number1, tv_station_number2, tv_station_number3, roomName;
+    TextView tv_station_name1, tv_station_name2, tv_station_name3, tv_station_number1, tv_station_number2, tv_station_number3, tv_location;
     String room;// 방 이름
     RetrofitService service;
     Spinner spinner;
@@ -117,9 +118,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         tv_station_number3 = (TextView) findViewById(R.id.tv_station_number3);
         tv_station_name3 = (TextView) findViewById(R.id.tv_station3);
-        roomName = (TextView) findViewById(R.id.tv_room_name);
+        tv_location = (TextView) findViewById(R.id.tv_location);
 
-        roomName.setText(room);
+        tv_location.setText(getAddress(MapActivity.this, lat, lng));
 
         btn_cafe.setOnClickListener(this);
         btn_study.setOnClickListener(this);
@@ -207,7 +208,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 else if(line_number_list.get(j).equals("S")) line_number_list.set(j, "신분당선");
                                 else if(line_number_list.get(j).equals("SU")) line_number_list.set(j, "수인선");
                             }
-                            
+
                             //지하철역이 여러개의 호선일 경우 처리
                             String result = " ";
 
@@ -316,20 +317,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             String address = "";
 
-            String country = addresses.get(0).getCountryName();
+         //   String country = addresses.get(0).getCountryName();
             String city = addresses.get(0).getLocality();
             String subCity = addresses.get(0).getSubLocality();
             String subsubCity = addresses.get(0).getThoroughfare();
+            String FeatureName = addresses.get(0).getFeatureName();
 
-            if (country != null && !address.toLowerCase().contains(country.toLowerCase())) { // 나라
+            //국가
+            /*
+           if (country != null && !address.toLowerCase().contains(country.toLowerCase())) { // 나라
                 if(address.equals("") || address.equals(" ")|| address.equals("  ")|| address.equals("   ")){
                     address += country;
                 }else{
                     address += " " + country;
                 }
             }
+            */
 
-            if(city != null && !address.toLowerCase().contains(city.toLowerCase())){ // 지역
+            //지역
+            if(city != null && !address.toLowerCase().contains(city.toLowerCase())){
                 if(address.equals("") || address.equals(" ")|| address.equals("  ")|| address.equals("   ")){
                     address += city;
                 }else{
@@ -342,6 +348,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             //동
             if(subsubCity != null && !address.toLowerCase().contains(subsubCity.toLowerCase())){ address += " " + subsubCity;;}
+
+            //번지
+            if(FeatureName != null && !address.toLowerCase().contains(FeatureName.toLowerCase())){ address += " " + FeatureName;;}
 
             return address;
         } else {
