@@ -74,7 +74,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                     String[] result = dbHelper.getDetailAppointment(room.getRoomID());
                     detailDialog = new DetailDialog(holder.itemView.getRootView().getContext()
                             ,room.getRoomTitle(),room.getRoomDate(),result[5],result[2],result[3]);
-                    
+
                     detailDialog.show();
                     Log.d("로컬 디비 테스트", result[0]);
                     Log.d("로컬 디비 테스트", result[1]);

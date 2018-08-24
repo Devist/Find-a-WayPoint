@@ -35,7 +35,7 @@ public class WaySocket {
         void onCreateResultReceived(JSONObject result);     //방 생성 정보를 알려줌
         void onPickResultReceived(JSONObject result);        //위치 정보 입력 발생 정보를 알려줌
         void onRoomListReceived(JSONObject result);
-        void onCompleteResultReceived(JSONObject reulst);
+        void onCompleteResultReceived(JSONObject result);
 
     }
     private WaySocketListener listener;
@@ -54,13 +54,12 @@ public class WaySocket {
         try{
             mSocket = IO.socket(URL);
             mSocket.connect();
-            //Log.d("소켓 ID : ", id);
 
             //이벤트 처리
             mSocket.on(CONNECTION, onConnectionResultReceived);
             mSocket.on(CREATE_ROOM,onCreateResultReceived);         //ROOM
             mSocket.on(PICK,onPickResultReceived);
-            mSocket.on(ENTRANCE, onEntranceResultRecieved);
+            mSocket.on(ENTRANCE, onEntranceResultReceived);
             mSocket.on(COMPLETE,onCompleteResultReceived);
             mSocket.on(RELOAD_ROOM,onReloadResultReceived);
 
@@ -147,10 +146,12 @@ public class WaySocket {
     };
 
     //ENTRANCE 이벤트 처리기
-    private Emitter.Listener onEntranceResultRecieved = new Emitter.Listener() {
+    private Emitter.Listener onEntranceResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
+            Log.d("테스트","입장 이벤트 들어왔어요");
             JSONObject receivedData = (JSONObject) args[0];
+            Log.d("테스트 룸인포",receivedData.toString());
             if(listener!=null)
                 listener.onEntranceEventReceived(receivedData);
         }
@@ -192,6 +193,7 @@ public class WaySocket {
         @Override
         public void call(Object... args) {
             JSONObject receivedData = (JSONObject) args[0];
+            Log.d("테스트 룸인포",receivedData.toString());
             if(listener!=null)
                 listener.onReloadEventReceived(receivedData);
         }

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-
+        setLayout();
         setListener(); // Edittext 내 코드 찾기 버튼이 다시 눌리지 않아 적용
     }
 
@@ -141,33 +141,46 @@ public class MainActivity extends AppCompatActivity {
             /*방 코드 검색을 하고 나면, 결과값이 다음 코드로 들어온다.*/
             @Override
             public void onReloadEventReceived(JSONObject result) {
+                Log.d("테스트", "응답값");
                 try{
-                    int status = result.getInt("status");
-                    Log.d("테스트", result.getString("msg"));
-
-                    if(status==WaySocket.SUCCESS){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(MainActivity.this,MyLocationActivity.class);
-                                intent.putExtra("room_code",editCode.getText().toString());
-                                startActivity(intent);
-                            }
-                        });
-
-                    }else if(status==WaySocket.FAIL){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Snackbar.make(btnAddRoom, "존재하지 않는 코드인가 봐요", Snackbar.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                }catch(Exception e){
+                    JSONObject data =(JSONObject)result.get("room_info");
+                    Log.d("테스트", data.getString("room_name"));
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            Intent intent = new Intent(MainActivity.this,RoomActivity.class);
+                            intent.putExtra("place","가산유미어스오피스텔");
+                            intent.putExtra("lat", 37.481724);
+                            intent.putExtra("lng", 126.8749569);
+                            intent.putExtra("room_code", editCode.getText().toString());
+                            startActivity(intent);
+                        }
+                    });
+//                    if(status==WaySocket.SUCCESS){
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Intent intent = new Intent(MainActivity.this,MyLocationActivity.class);
+//                                intent.putExtra("room_code",editCode.getText().toString());
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                    }else if(status==WaySocket.FAIL){
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Snackbar.make(btnAddRoom, "존재하지 않는 코드인가 봐요", Snackbar.LENGTH_LONG).show();
+//                            }
+//                        });
+//                    //}
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
                             Snackbar.make(btnAddRoom, "통신에 실패했습니다.", Snackbar.LENGTH_SHORT).show();
                         }
                     });
