@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -68,8 +69,8 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Intent intent = getIntent();
         try{
-            lat = intent.getExtras().getFloat("MyLat");
-            lng = intent.getExtras().getFloat("MyLng");
+            lat = intent.getExtras().getDouble("lat");
+            lng = intent.getExtras().getDouble("lng");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -117,6 +118,9 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d("Test","들어왔나유");
+        Log.d("Test",Double.toString(lat));
+        Log.d("Test",Double.toString(lng));
 
         map = googleMap;
 
@@ -132,7 +136,8 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerOptions_my.snippet(my_address);
 
         map.addMarker(markerOptions_my);
-        map.moveCamera(CameraUpdateFactory.newLatLng(My));
-        map.animateCamera(CameraUpdateFactory.zoomTo(15));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(My,15));
+
+
     }
 }

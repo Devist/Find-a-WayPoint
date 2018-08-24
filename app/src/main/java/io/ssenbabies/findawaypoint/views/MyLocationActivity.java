@@ -162,6 +162,9 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 intent.putExtra("place", placeName);
                 intent.putExtra("lat",latitude);
                 intent.putExtra("lng",longitude);
+                Log.d("테스트",Double.toString(latitude));
+                Log.d("테스트",Double.toString(longitude));
+
                 startActivity(intent);
             }
         }
