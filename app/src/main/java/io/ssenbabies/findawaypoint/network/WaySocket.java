@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import io.socket.client.IO;
+import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class WaySocket {
@@ -18,16 +19,22 @@ public class WaySocket {
     private static String CREATE_ROOM   = "ROOM";
     private static String PICK          = "PICK";
     private static String COMPLETE      = "COMPLETE";
-    private static String RELOAD_ROOM   = "RELOAD_ROOM";
+    private static String RELOAD_ROOM   = "ROOM_INFO";
+    private static String ENTRANCE      = "ENTRANCE";
     private static String URL           = "http://here-dot.kro.kr/";
 
     private io.socket.client.Socket mSocket;
 
-    public static View currentView;
+
+
 
     // 이벤트 등록 리스너
     public interface WaySocketListener {
-        public void onCreateResultReceived(View v, JSONObject result);
+        void onCreateResultReceived(JSONObject result);
+        void onPickEventReceived(JSONObject result);
+        void onConnectionEventReceived();
+        void onReloadEventReceived(JSONObject result);
+        void onEntranceEventReceived(JSONObject result);
     }
 
     private WaySocketListener listener;
@@ -53,9 +60,10 @@ public class WaySocket {
             //이벤트 처리
             mSocket.on(CONNECTION, onConnectionResultReceived);
             mSocket.on(CREATE_ROOM,onCreateResultReceived);
-            //mSocket.on(PICK,onPickResultReceived);
+            mSocket.on(PICK,onPickResultReceived);
+            mSocket.on(ENTRANCE, onEntranceResultRecieved);
             //mSocket.on(COMPLETE,onCompleteResultReceived);
-            //mSocket.on(RELOAD_ROOM,onReloadResultReceived);
+            mSocket.on(RELOAD_ROOM,onReloadResultReceived);
 
 
         }catch(Exception e){
@@ -72,33 +80,44 @@ public class WaySocket {
             e.printStackTrace();
         }
     }
-    public void requestPick(){
+
+    public void requestEntrance(String currentRoomCode, String userName) {
         JSONObject data = new JSONObject();
         try {
-            data.put("name", "value1");
-            data.put("room", "value2");
-            data.put("","");
-            mSocket.emit(RELOAD_ROOM, data);
+            data.put("room_code", currentRoomCode);
+            data.put("user_name",userName);
+            mSocket.emit(ENTRANCE, data);
         } catch(JSONException e) {
             e.printStackTrace();
         }
     }
-    public void requestComplete(){
+
+    public void requestPick(String room_code, Double lat, Double lng){
+        Log.d("테스트 픽 실행", "OK");
         JSONObject data = new JSONObject();
         try {
-            data.put("key1", "value1");
-            data.put("key2", "value2");
+            data.put("room_code", room_code);
+            data.put("lat", lat);
+            data.put("long",lng);
+            mSocket.emit(PICK, data);
+        } catch(JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void requestComplete(String room_code){
+        JSONObject data = new JSONObject();
+        try {
+            data.put("room_code", room_code);
             mSocket.emit(RELOAD_ROOM, data);
         } catch(JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void requestReloadRoom(){
+    public void requestReloadRoom(String room_code){
         JSONObject data = new JSONObject();
         try {
-            data.put("key1", "value1");
-            data.put("key2", "value2");
+            data.put("room_code", room_code);
             mSocket.emit(RELOAD_ROOM, data);
         } catch(JSONException e) {
             e.printStackTrace();
@@ -117,26 +136,23 @@ public class WaySocket {
     }
 
 
-    // Socket서버에 connect 된 후, 서버로부터 전달받은 'Socket.EVENT_CONNECT' Event 처리.
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            // your code...
-            Log.d("소켓 ",args.toString());
-        }
-    };
-
-    // 서버로부터 전달받은 'chat-message' Event 처리.
     private Emitter.Listener onConnectionResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
             // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
             JSONObject receivedData = (JSONObject) args[0];
-            try{
-                Log.d("소켓 커넥션 시도 : ",receivedData.getString("msg"));
-            }catch(Exception e){
+            if(listener!=null)
+                listener.onConnectionEventReceived();
+        }
+    };
 
-            }
+    private Emitter.Listener onEntranceResultRecieved = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
+            JSONObject receivedData = (JSONObject) args[0];
+            if(listener!=null)
+                listener.onEntranceEventReceived(receivedData);
         }
     };
 
@@ -145,7 +161,7 @@ public class WaySocket {
         public void call(Object... args) {
             JSONObject receivedData = (JSONObject) args[0];
             if(listener!=null)
-                listener.onCreateResultReceived(currentView, receivedData);
+                listener.onCreateResultReceived(receivedData);
 
         }
     };
@@ -153,7 +169,9 @@ public class WaySocket {
     private Emitter.Listener onPickResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-
+            JSONObject receivedData = (JSONObject) args[0];
+            if(listener!=null)
+                listener.onPickEventReceived(receivedData);
         }
     };
 
@@ -167,7 +185,9 @@ public class WaySocket {
     private Emitter.Listener onReloadResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-
+            JSONObject receivedData = (JSONObject) args[0];
+            if(listener!=null)
+                listener.onReloadEventReceived(receivedData);
         }
     };
 

@@ -4,6 +4,7 @@ package io.ssenbabies.findawaypoint.views;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
@@ -42,6 +45,9 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
     private GoogleApiClient mGoogleApiClient;
     private int PLACE_PICKER_REQUEST = 1;
 
+    private String currentRoomCode, latitude, longitude, userName;
+
+    private SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,6 +59,13 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     private void init(){
+        prefs = getSharedPreferences("Pref", MODE_PRIVATE);
+        currentRoomCode = getIntent().getStringExtra("roomCode");
+        userName = prefs.getString("name","anonymous");
+
+        Log.d("테스트_룸코드",currentRoomCode);
+
+        WaySocket.getInstance().requestEntrance(currentRoomCode, userName);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -67,10 +80,11 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
 
         btnCancel = (ImageButton)findViewById(R.id.btnCancle);
         editMyLocation = (EditText)findViewById(R.id.edit_mylocation);
-
+        editMyLocation.setFocusable(false);
         setListener();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setListener(){
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,16 +93,42 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
             }
         });
 
-        editMyLocation.setOnTouchListener(new View.OnTouchListener() {
+        editMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(MyLocationActivity.this), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
-                return false;
+            }
+        });
+
+        WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
+            @Override
+            public void onCreateResultReceived(JSONObject result) {
+
+            }
+
+            @Override
+            public void onPickEventReceived(JSONObject result) {
+                Log.d("테스트 내 위치 선정됨", result.toString());
+            }
+
+            @Override
+            public void onConnectionEventReceived() {
+
+            }
+
+            @Override
+            public void onReloadEventReceived(JSONObject result) {
+
+            }
+
+            @Override
+            public void onEntranceEventReceived(JSONObject result) {
+                Log.d("테스트 방 입장 : ","성공");
             }
         });
 
@@ -117,20 +157,16 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         if (requestCode == PLACE_PICKER_REQUEST) {
 
             if (resultCode == RESULT_OK) {
-
+                Log.d("테스트","진입");
                 Place place = PlacePicker.getPlace(data, this);
                 StringBuilder stBuilder = new StringBuilder();
                 String placename = String.format("%s", place.getName());
                 double latitude = place.getLatLng().latitude;
                 double longitude = place.getLatLng().longitude;
-                String address = String.format("%s", place.getAddress());
-                String phoneNumber = String.format("%s", place.getPhoneNumber());
-                String webSite = String.format("%s", place.getWebsiteUri());
-                String Star = String.format("%s", place.getRating());
-                String price = String.format("%s", place.getPriceLevel());
-                String type = String.format("%s", place.getPlaceTypes());
+                WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude);
 
-                LatLng latLng = new LatLng(latitude, longitude);
+                //임시코드
+                startActivity(new Intent(getApplicationContext(), RoomActivity.class));
             }
         }
     }
