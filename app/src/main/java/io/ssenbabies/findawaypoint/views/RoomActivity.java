@@ -1,5 +1,6 @@
 package io.ssenbabies.findawaypoint.views;
 
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -11,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.ssenbabies.findawaypoint.utils.Location;
 import io.ssenbabies.findawaypoint.views.adapters.Friend;
 import io.ssenbabies.findawaypoint.views.adapters.FriendAdapter;
 import io.ssenbabies.findawaypoint.R;
@@ -122,6 +126,71 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
+                switch(v.getId()) {
+                    case R.id.btn_go_place:
+
+                        LayoutInflater dialog = LayoutInflater.from(RoomActivity.this);
+                        final View dialogLayout = dialog.inflate(R.layout.item_dialog, null);
+                        final Dialog myDialog = new Dialog(RoomActivity.this);
+
+                        myDialog.setTitle("알림");
+                        myDialog.setContentView(dialogLayout);
+                        myDialog.show();
+
+                        String result, result2, result3;
+                        result = "     나를 포함하여" + "\n";
+                        int count = 3; // 방에 참여한 사람 수
+
+                        result2 = "총 " + String.valueOf(count) + "명의 약속장소를" + "\n";
+                        result3 = "  추천 받으시겠어요?";
+
+                        result += result2;
+                        result += result3;
+
+                        TextView tv_result = (TextView) dialogLayout.findViewById(R.id.tv_text);
+                        tv_result.setText(result);
+
+                        Button btn_ok = (Button)dialogLayout.findViewById(R.id.btn_ok);
+                        Button btn_cancel = (Button)dialogLayout.findViewById(R.id.btn_cancel);
+
+                        btn_ok.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {     //OK 누르면 할거 -> 장소 추천화면으로 이동
+                                Toast.makeText(RoomActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+                                myDialog.cancel();
+
+                                Location.requestSingleUpdate(RoomActivity.this,
+                                        new Location.LocationCallback() {
+                                            @Override
+                                            public void onNewLocationAvailable(Location.GPSCoordinates location) {
+
+                                                float lat = location.latitude;
+                                                float lng = location.longitude;
+
+                                                Intent intent = new Intent(getApplication(), MapActivity.class);
+
+                                                intent.putExtra("MidLat", lat);
+                                                intent.putExtra("MidLng", lng);
+                                           //     intent.putExtra("room_name", room);
+                                                startActivity(intent);
+                                            }
+                                        });
+                            }
+                        });
+
+                        btn_cancel.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                Toast.makeText(RoomActivity.this, "NO", Toast.LENGTH_SHORT).show();
+                                myDialog.cancel();
+                            }
+                        });
+                        break;
+                }
             }
         });
     }

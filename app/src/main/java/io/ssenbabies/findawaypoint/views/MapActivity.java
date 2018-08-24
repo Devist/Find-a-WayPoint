@@ -86,8 +86,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         Intent intent = getIntent();
-        lat = intent.getExtras().getFloat("MyLat");
-        lng = intent.getExtras().getFloat("MyLng");
+        lat = intent.getExtras().getFloat("MidLat");
+        lng = intent.getExtras().getFloat("MidLng");
         room = intent.getStringExtra("room_name");
 
         Log.d("Location_lat", String.valueOf(lat));
