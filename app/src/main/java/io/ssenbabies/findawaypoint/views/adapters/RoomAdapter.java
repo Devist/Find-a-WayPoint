@@ -50,8 +50,14 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, room.getRoomID(), Toast.LENGTH_SHORT).show();
-                //String[] result = dbHelper.getDetailAppointment(room.getRoomID());
-                //Log.d("로컬 디비 테스트", result.toString());
+                String[] result = dbHelper.getDetailAppointment(room.getRoomID());
+                Log.d("로컬 디비 테스트", result[0]);
+                Log.d("로컬 디비 테스트", result[1]);
+                Log.d("로컬 디비 테스트", result[2]);
+                Log.d("로컬 디비 테스트", result[3]);
+                Log.d("로컬 디비 테스트", result[4]);
+                Log.d("로컬 디비 테스트", result[5]);
+                Log.d("로컬 디비 테스트", result[6]);
             }
         });
     }

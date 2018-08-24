@@ -64,10 +64,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public String[] getDetailAppointment(String room_code){
         SQLiteDatabase db = getReadableDatabase();
         String[] result = new String[7];
-        Cursor cursor = db.rawQuery("SELECT * FROM APPOINTMENTS WHERE _id= ?", new String[]{room_code});
-
+        Cursor cursor = db.rawQuery("SELECT * FROM APPOINTMENTS WHERE _id= "+room_code+";", null);
+        cursor.moveToFirst();
         for(int i = 0 ;i<7; i++){
-            result[0] = cursor.getString(0);
+            result[i] = cursor.getString(i);
         }
 
         db.close();
