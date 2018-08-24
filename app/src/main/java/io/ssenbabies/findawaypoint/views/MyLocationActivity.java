@@ -63,7 +63,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         currentRoomCode = getIntent().getStringExtra("roomCode");
         userName = prefs.getString("name","anonymous");
 
-        Log.d("테스트_룸코드",currentRoomCode);
+        Log.d("테스트_룸코드",currentRoomCode + "a");
 
         WaySocket.getInstance().requestEntrance(currentRoomCode, userName);
         mGoogleApiClient = new GoogleApiClient
