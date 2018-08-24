@@ -65,51 +65,18 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*
-                if(editAppointment.isEnabled()){
-                    editAppointment.setEnabled(false);
-                    editAppointment.setFocusable(false);
-                    btnShare.setText("약속하러 가기");
-                }else{
-                    Intent intent = new Intent(getApplicationContext(),MyLocationActivity.class);
-                    intent.putExtra("roomCode", currentRoomCode);
-                    startActivity(intent);
-                    finish();
-                }
-                */
+            if(editAppointment.isEnabled()){
+                editAppointment.setEnabled(false);
+                editAppointment.setFocusable(false);
+                btnShare.setText("약속하러 가기");
 
-                //공유하는 코드(라인, 카카오, 문자)
-                String subject = "방코드";
-                String text = "abcde@@!@#";
-
-                List targetedShareIntents = new ArrayList<>();
-
-                // 카카오톡
-                Intent kakaoIntent = getShareIntent("com.kakao.talk", subject, text);
-                if(kakaoIntent != null)
-                    targetedShareIntents.add(kakaoIntent);
-
-                //라인
-                Intent lineIntent = getShareIntent("jp.naver.line", subject, text);
-                if(lineIntent != null)
-                    targetedShareIntents.add(lineIntent);
-
-                //문자
-
-                Intent snsIntent = new Intent(Intent.ACTION_VIEW);
-                snsIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                snsIntent.putExtra(Intent.EXTRA_TEXT, text);
-                //  snsIntent.putExtra("subject", "방코드");
-                //  snsIntent.putExtra("text", "asd123$@");
-                snsIntent.setType("vnd.android-dir/mms-sms");
-
-                if(snsIntent != null)
-                    targetedShareIntents.add(snsIntent);
-
-                Intent chooser = Intent.createChooser((Intent) targetedShareIntents.remove(0), "방코드 공유하기");
-                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
-                startActivity(chooser);
-
+                shareRoomCode(currentRoomCode);
+            }else{
+                Intent intent = new Intent(getApplicationContext(),MyLocationActivity.class);
+                intent.putExtra("roomCode", currentRoomCode);
+                startActivity(intent);
+                finish();
+            }
             }
         });
 
@@ -211,5 +178,42 @@ public class CreateActivity extends AppCompatActivity {
             return intent;
 
         return null;
+    }
+
+    private void shareRoomCode(String currentRoomCode){
+        //공유하는 코드(라인, 카카오, 문자)
+        String subject = "방코드";
+        if (currentRoomCode==null || currentRoomCode.length()<2){
+         currentRoomCode="fake";
+        }
+
+        List targetedShareIntents = new ArrayList<>();
+
+        // 카카오톡
+        Intent kakaoIntent = getShareIntent("com.kakao.talk", subject, currentRoomCode);
+        if(kakaoIntent != null)
+            targetedShareIntents.add(kakaoIntent);
+
+        //라인
+        Intent lineIntent = getShareIntent("jp.naver.line", subject, currentRoomCode);
+        if(lineIntent != null)
+            targetedShareIntents.add(lineIntent);
+
+        //문자
+
+        Intent snsIntent = new Intent(Intent.ACTION_VIEW);
+        snsIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        snsIntent.putExtra(Intent.EXTRA_TEXT, currentRoomCode);
+        //  snsIntent.putExtra("subject", "방코드");
+        //  snsIntent.putExtra("text", "asd123$@");
+        snsIntent.setType("vnd.android-dir/mms-sms");
+
+        if(snsIntent != null)
+            targetedShareIntents.add(snsIntent);
+
+        Intent chooser = Intent.createChooser((Intent) targetedShareIntents.remove(0), "방코드 공유하기");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
+        startActivity(chooser);
+
     }
 }

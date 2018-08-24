@@ -39,9 +39,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         final Friend friend = friends.get(position);
 
         holder.userName.setText(friend.getUserName());
-        if(friend.getIsDone()==1 ){
-            holder.userName.setBackgroundColor(Color.BLUE);
-            holder.imgDone.setVisibility(View.VISIBLE);
+        if(friend.getIsDone()==0 ){
+            holder.userName.setBackgroundResource(R.drawable.tv_friend_yet);
+            holder.userName.setTextColor(Color.WHITE);
+            holder.imgDone.setVisibility(View.INVISIBLE);
         }
 
 

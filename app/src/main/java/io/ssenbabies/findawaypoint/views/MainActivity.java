@@ -128,7 +128,9 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onPickResultReceived(JSONObject result) { }
             @Override public void onRoomListReceived(JSONObject result) { }
             @Override public void onCompleteResultReceived(JSONObject reulst) { }
-            @Override public void onConnectionEventReceived() { }
+            @Override public void onConnectionEventReceived() {
+                Log.d("테스트","소켓 커넥트 ");
+            }
             @Override public void onEntranceEventReceived(JSONObject result) { }
 
             /*방 코드 검색을 하고 나면, 결과값이 다음 코드로 들어온다.*/
