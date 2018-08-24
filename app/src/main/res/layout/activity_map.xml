@@ -188,8 +188,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"
-            android:divider="#000000"
-            android:dividerHeight="0.70dp"
+            android:divider="#d7d7d7"
+            android:dividerHeight="1dp"
             />
     </LinearLayout>
 

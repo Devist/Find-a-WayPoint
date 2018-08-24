@@ -67,6 +67,7 @@ public class PlaceAdapter extends BaseAdapter {
         Drawable drawable = rating.getProgressDrawable();
         drawable.setColorFilter(Color.parseColor("#ffc524"), PorterDuff.Mode.SRC_ATOP);
 
+        rating.setFocusable(false);
         rating.setStepSize((float) 1.0);
 
         // Data Set에서 position에 위치한 데이터 참조 획득
@@ -78,8 +79,8 @@ public class PlaceAdapter extends BaseAdapter {
 
         rating.setRating((float) place.getPlaceRating());
 
-
         //int Star = (int) Math.round(placeRating); // 평점 반올림
+
         btn_search.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {

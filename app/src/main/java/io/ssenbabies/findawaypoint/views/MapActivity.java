@@ -55,7 +55,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by xowns on 2018-08-09.
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, View.OnClickListener, AdapterView.OnItemClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener, View.OnClickListener {
 
     float lat, lng; // 마커의 위도 경도
     Marker mark; // 시작 마커
@@ -139,9 +139,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         adapter = new PlaceAdapter(this, placesArrayList);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter); // 리스트뷰에 값을 넣음
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("onItemClick", "아이템 클릭");
+                Place item = (Place) adapter.getItem(position);
 
-        listView.setOnItemClickListener(this);
+                Marker place_mark;
+                double lat = item.getPlaceLatitude();
+                double lng = item.getPlaceLongtitude();
+                String name = item.getPlaceName();
+
+                LatLng place = new LatLng(lat, lng);
+
+                String place_address = getAddress(MapActivity.this, lat, lng);
+
+                place_mark = map.addMarker(new MarkerOptions()
+                        .position(place)
+                        .title(name).snippet(place_address));
+
+                place_mark.showInfoWindow(); // 말풍선 띄우기
+
+                map.moveCamera(CameraUpdateFactory.newLatLng(place));
+                map.animateCamera(CameraUpdateFactory.zoomTo(15));
+            }
+        });
+
 
         //주변 지하철역 정보
         Retrofit retrofit = new Retrofit.Builder()
@@ -431,31 +455,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-    }
-
-    //리스트뷰 클릭
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        Place item = (Place) adapter.getItem(i);
-
-        Marker place_mark;
-        double lat = item.getPlaceLatitude();
-        double lng = item.getPlaceLongtitude();
-        String name = item.getPlaceName();
-
-        LatLng place = new LatLng(lat, lng);
-
-        String place_address = getAddress(this, lat, lng);
-
-        place_mark = map.addMarker(new MarkerOptions()
-                .position(place)
-                .title(name).snippet(place_address));
-
-        place_mark.showInfoWindow(); // 말풍선 띄우기
-
-        map.moveCamera(CameraUpdateFactory.newLatLng(place));
-        map.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
 
