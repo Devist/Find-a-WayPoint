@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
 public class CreateActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class CreateActivity extends AppCompatActivity {
     private Button btnShare;
     private EditText editAppointment;
     private String currentRoomCode;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class CreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
 
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
         setLayout();
     }
 
@@ -110,10 +113,10 @@ public class CreateActivity extends AppCompatActivity {
 
                     if(status==WaySocket.SUCCESS){
                         currentRoomCode = result.getString("room_code");
+                        dbHelper.setAppointment(currentRoomCode,editAppointment.getText().toString());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 Snackbar.make(btnShare, "생성 완료! 공유하고 약속 장소를 정하러 가요", Snackbar.LENGTH_SHORT).show();
                                 btnShare.setVisibility(View.VISIBLE);
                             }
@@ -130,7 +133,7 @@ public class CreateActivity extends AppCompatActivity {
                     }
 
                 }catch(Exception e){
-                    Snackbar.make(btnShare, "통신에 실패했습니다.", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(btnShare, "실패했습니다.", Snackbar.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }

@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONObject;
 
 import io.ssenbabies.findawaypoint.R;
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 
 public class MyLocationActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
@@ -48,6 +49,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
     private String currentRoomCode, latitude, longitude, userName;
 
     private SharedPreferences prefs;
+    private DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,6 +61,9 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     private void init(){
+
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
+
         prefs = getSharedPreferences("Pref", MODE_PRIVATE);
         currentRoomCode = getIntent().getStringExtra("roomCode");
         userName = prefs.getString("name","anonymous");
@@ -150,6 +155,8 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 double longitude = place.getLatLng().longitude;
                 WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude,"");
 
+                //임시 코드. 나중에 onPickResultReceived 로 옮겨야함
+                dbHelper.updatePickStateToDone(currentRoomCode);
                 //임시코드
                 Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                 intent.putExtra("place", placeName);
