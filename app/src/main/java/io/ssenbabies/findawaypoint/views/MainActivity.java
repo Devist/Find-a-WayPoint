@@ -125,7 +125,9 @@ public class MainActivity extends AppCompatActivity {
         WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
 
             @Override public void onCreateResultReceived(JSONObject result) { }
-            @Override public void onPickEventReceived(JSONObject result) { }
+            @Override public void onPickResultReceived(JSONObject result) { }
+            @Override public void onRoomListReceived(JSONObject result) { }
+            @Override public void onCompleteResultReceived(JSONObject reulst) { }
             @Override public void onConnectionEventReceived() { }
             @Override public void onEntranceEventReceived(JSONObject result) { }
 
