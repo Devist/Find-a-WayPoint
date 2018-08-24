@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,6 +62,8 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private EditText myPlace;
 
+    private Button goPlace;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFriendsView.setLayoutManager(mFriendsTopViewManager);
         mFriendsView.setHasFixedSize(true);
 
+        goPlace = (Button)findViewById(R.id.btn_go_place);
 
         Friend[] friend = new Friend[5];
         friend[0] = new Friend(1,"오동환");
@@ -114,7 +118,12 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void setListener(){
+        goPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
