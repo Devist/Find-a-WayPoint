@@ -68,11 +68,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     CircleOptions circle1KM; // 반경 1km
     Circle circle_now; // 현재 위치 반경
     CircleOptions circle1Km_now; // 현재 위치 반경 1km
-    Button btn_cafe, btn_study, btn_restaurant, btn_alchol, btn_funny, btn_home;
+    Button btn_cafe, btn_study, btn_restaurant, btn_alchol, btn_home;
     ListView listView; // 장소 출력 리스트뷰
     ArrayList<Place> placesArrayList; // google place api로 받아온 장소 데이터
     PlaceAdapter adapter;
-    TextView tv_station_name1, tv_station_name2, tv_station_name3, tv_station_number1, tv_station_number2, tv_station_number3, tv_location;
+    TextView tv_location;
     String room;// 방 이름
     RetrofitService service;
     Spinner spinner;
@@ -97,7 +97,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btn_study = (Button) findViewById(R.id.btn_study);
         btn_restaurant = (Button) findViewById(R.id.btn_restaurant);
         btn_alchol = (Button) findViewById(R.id.btn_alchol);
-        btn_funny = (Button) findViewById(R.id.btn_funny);
         btn_home = (Button) findViewById(R.id.btn_home);
 
         spinner = (Spinner) findViewById(R.id.spinner);
@@ -129,7 +128,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btn_study.setOnClickListener(this);
         btn_restaurant.setOnClickListener(this);
         btn_alchol.setOnClickListener(this);
-        btn_funny.setOnClickListener(this);
         btn_home.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.place_list);
@@ -422,7 +420,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btn_study.setTextColor(Color.parseColor("#d7d7d7"));
         btn_restaurant.setTextColor(Color.parseColor("#d7d7d7"));
         btn_alchol.setTextColor(Color.parseColor("#d7d7d7"));
-        btn_funny.setTextColor(Color.parseColor("#d7d7d7"));
 
         switch(view.getId()) {
 
@@ -451,10 +448,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 spinner.setSelection(0);
                 break;
 
-            case R.id.btn_funny:
-                type = 5;
-                spinner.setSelection(0);
-                break;
         }
 
         //디폴트 거리순
@@ -462,7 +455,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(type == 2) btn_study.setTextColor(Color.parseColor("#414042"));
         if(type == 3) btn_restaurant.setTextColor(Color.parseColor("#414042"));
         if(type == 4) btn_alchol.setTextColor(Color.parseColor("#414042"));
-        if(type == 5) btn_funny.setTextColor(Color.parseColor("#414042"));
 
         getPlaceData(type, sort[0], lat, lng);
 
