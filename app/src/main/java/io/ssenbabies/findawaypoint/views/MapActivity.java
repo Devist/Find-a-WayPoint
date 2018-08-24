@@ -178,36 +178,61 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         for(int i=0; i<arr.size(); i++) {
 
                             JsonObject station = (JsonObject) arr.get(i);
-                            Log.d("역 이름 : ", String.valueOf(station.get("stationName")));
+                           // Log.d("역 이름 : ", String.valueOf(station.get("stationName")));
 
                             JsonArray lineNumberArray = (JsonArray) station.get("stationLineNumber");
 
-                            Log.d("역 호선 : ", String.valueOf(lineNumberArray.get(0)));
+                            ArrayList<String> line_number_list =  new ArrayList<>();
 
-                            String stationNumber = lineNumberArray.get(0).toString();
+                            // " 를 기준으로 스프링 파싱
+                            for(int j=0; j<lineNumberArray.size(); j++) {
+
+                                String line_number = lineNumberArray.get(j).toString();
+                                String[] result_line_number = line_number.split("\"");
+
+                                line_number_list.add(String.valueOf(result_line_number[1]));
+                            }
+
                             String stationName = station.get("stationName").toString();
 
-                            String[] result_number = stationNumber.split("\"");
                             String[] result_name = stationName.split("\"");
 
-                            if(result_number[1].equals("I")) result_number[1] = "인천1호선";
-                            else if(result_number[1].equals("K")) result_number[1] = "경의중앙선";
-                            else if(result_number[1].equals("B")) result_number[1] = "분당선";
-                            else if(result_number[1].equals("A")) result_number[1] = "공항철도";
-                            else if(result_number[1].equals("G")) result_number[1] = "경춘선";
-                            else if(result_number[1].equals("S")) result_number[1] = "신분당선";
-                            else if(result_number[1].equals("SU")) result_number[1] = "수인선";
+                            for(int j=0; j<line_number_list.size(); j++) {
+
+                                if(line_number_list.get(j).equals("I")) line_number_list.set(j, "인천1호선");
+                                else if(line_number_list.get(j).equals("K")) line_number_list.set(j,"경의중앙선");
+                                else if(line_number_list.get(j).equals("B")) line_number_list.set(j, "분당선");
+                                else if(line_number_list.get(j).equals("A")) line_number_list.set(j, "공항철도");
+                                else if(line_number_list.get(j).equals("G")) line_number_list.set(j, "경춘선");
+                                else if(line_number_list.get(j).equals("S")) line_number_list.set(j, "신분당선");
+                                else if(line_number_list.get(j).equals("SU")) line_number_list.set(j, "수인선");
+                            }
+                            
+                            //지하철역이 여러개의 호선일 경우 처리
+                            String result = " ";
 
                             if(i==0) {
-                                tv_station_number1.setText(result_number[1]);
+                                for(int j=0; j<line_number_list.size(); j++) {
+                                    result += line_number_list.get(j);
+                                    result += ",";
+                                }
+                                tv_station_number1.setText(result);
                                 tv_station_name1.setText(result_name[1]);
                             }
                             else if(i == 1) {
-                                tv_station_number2.setText(result_number[1]);
+                                for(int j=0; j<line_number_list.size(); j++) {
+                                    result += line_number_list.get(j);
+                                    result += ",";
+                                }
+                                tv_station_number2.setText(result);
                                 tv_station_name2.setText(result_name[1]);
                             }
                             else if(i == 2){
-                                tv_station_number3.setText(result_number[1]);
+                                for(int j=0; j<line_number_list.size(); j++) {
+                                    result += line_number_list.get(j);
+                                    result += ",";
+                                }
+                                tv_station_number3.setText(result);
                                 tv_station_name3.setText(result_name[1]);
                             }
                         }
