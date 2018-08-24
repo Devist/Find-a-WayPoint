@@ -32,8 +32,6 @@ import io.ssenbabies.findawaypoint.databases.DBHelper;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton btnAddRoom;
-    private Button btnFindRoom;
-    private Button btnFindAppointment;
     private RecyclerView recyclerRoomView;
     private Dialog findDialog;
     private EditText editCode;
@@ -48,29 +46,48 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WaySocket.getInstance();
-
-        //위치 권한 다이얼로그
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // 위치 정보 접근 요청
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
-        }
-
-        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
-
+        initSetting();
         setLayout();
+        setListener();
+    }
 
-        go = (Button) findViewById(R.id.btn_go);
+    private void initSetting(){
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
+        requestPermission();
+        WaySocket.getInstance();
+        //dbHelper.insertSampleRoom();
+    }
+
+    private void setLayout(){
+        List<Room> rooms = dbHelper.getAppointments();
+
+        go = (Button) findViewById(R.id.btn_go);    //테스트용 버튼
+
+        btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
+        editCode = (EditText) findViewById(R.id.edit_code);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
+        recyclerRoomView.setHasFixedSize(true);
+        recyclerRoomView.setLayoutManager(layoutManager);
+        recyclerRoomView.setAdapter(new RoomAdapter(getApplicationContext(), rooms, R.layout.activity_main));
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        setListener(); // Edittext 내 코드 찾기 버튼이 다시 눌리지 않아 적용
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setListener(){
 
         go.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 switch(v.getId()) {
-
                     case R.id.btn_go:
                         Intent intent = new Intent(MainActivity.this, ShareActivity.class);
                         startActivity(intent);
@@ -78,31 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    private void setLayout(){
-        btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
-        editCode = (EditText) findViewById(R.id.edit_code);
-
-        recyclerRoomView = (RecyclerView) findViewById(R.id.recyclerRoomView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerRoomView.setHasFixedSize(true);
-        recyclerRoomView.setLayoutManager(layoutManager);
-
-        //dbHelper.insertSampleRoom();
-
-        List<Room> rooms = dbHelper.getAppointments();
-        Room[] room = new Room[5];
-
-        recyclerRoomView.setAdapter(new RoomAdapter(getApplicationContext(), rooms, R.layout.activity_main));
-
-
-        setListener();
-
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setListener(){
         btnAddRoom.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (editCode.getRight() - editCode.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // 아래의 setWaySocketListener의 onReloadEventReceived 로 결과값 들어옴
                         WaySocket.getInstance().requestReloadRoom(editCode.getText().toString());
-
-                        return true;
+                        return false;
                     }
                 }
                 return false;
@@ -130,36 +123,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
         WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
-            @Override
-            public void onCreateResultReceived(JSONObject result) {
 
-            }
+            @Override public void onCreateResultReceived(JSONObject result) { }
+            @Override public void onPickResultReceived(JSONObject result) { }
+            @Override public void onRoomListReceived(JSONObject result) { }
+            @Override public void onCompleteResultReceived(JSONObject reulst) { }
+            @Override public void onConnectionEventReceived() { }
+            @Override public void onEntranceEventReceived(JSONObject result) { }
 
-            @Override
-            public void onPickEventReceived(JSONObject result) {
-
-            }
-
-            @Override
-            public void onConnectionEventReceived() {
-
-            }
-
+            /*방 코드 검색을 하고 나면, 결과값이 다음 코드로 들어온다.*/
             @Override
             public void onReloadEventReceived(JSONObject result) {
-                Log.d("테스트 코드 검색 결과", "성공");
                 try{
                     int status = result.getInt("status");
+                    Log.d("테스트", result.getString("msg"));
 
                     if(status==WaySocket.SUCCESS){
-                        Log.d("테스트", result.getString("msg"));
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                            Intent intent = new Intent(MainActivity.this,MyLocationActivity.class);
-                            intent.putExtra("room_code",editCode.getText().toString());
-                            startActivity(intent);
+                                Intent intent = new Intent(MainActivity.this,MyLocationActivity.class);
+                                intent.putExtra("room_code",editCode.getText().toString());
+                                startActivity(intent);
                             }
                         });
 
@@ -167,10 +152,9 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Snackbar.make(btnAddRoom, "생성 실패! 서버 개발자가 잘못했습니다", Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(btnAddRoom, "존재하지 않는 코드인가 봐요", Snackbar.LENGTH_LONG).show();
                             }
                         });
-
                     }
 
                 }catch(Exception e){
@@ -180,18 +164,20 @@ public class MainActivity extends AppCompatActivity {
                             Snackbar.make(btnAddRoom, "통신에 실패했습니다.", Snackbar.LENGTH_SHORT).show();
                         }
                     });
-
                 }
-
-            }
-
-            @Override
-            public void onEntranceEventReceived(JSONObject result) {
-
             }
         });
-
     }
 
+    private void requestPermission(){
+        //위치 권한 다이얼로그
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // 위치 정보 접근 요청
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        }
+    }
 
 }

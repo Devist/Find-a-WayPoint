@@ -63,7 +63,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         currentRoomCode = getIntent().getStringExtra("roomCode");
         userName = prefs.getString("name","anonymous");
 
-        Log.d("테스트_룸코드",currentRoomCode);
+        Log.d("테스트_룸코드",currentRoomCode + "a");
 
         WaySocket.getInstance().requestEntrance(currentRoomCode, userName);
         mGoogleApiClient = new GoogleApiClient
@@ -106,32 +106,17 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
         });
 
         WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
-            @Override
-            public void onCreateResultReceived(JSONObject result) {
-
-            }
-
-            @Override
-            public void onPickEventReceived(JSONObject result) {
-                Log.d("테스트 내 위치 선정됨", result.toString());
-            }
-
-            @Override
-            public void onConnectionEventReceived() {
-
-            }
-
-            @Override
-            public void onReloadEventReceived(JSONObject result) {
-
-            }
-
+            @Override public void onCreateResultReceived(JSONObject result) { }
+            @Override public void onPickResultReceived(JSONObject result) { }
+            @Override public void onRoomListReceived(JSONObject result) { }
+            @Override public void onCompleteResultReceived(JSONObject reulst) { }
+            @Override public void onConnectionEventReceived() { }
+            @Override public void onReloadEventReceived(JSONObject result) { }
             @Override
             public void onEntranceEventReceived(JSONObject result) {
                 Log.d("테스트 방 입장 : ","성공");
             }
         });
-
     }
 
 
@@ -163,7 +148,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 String placename = String.format("%s", place.getName());
                 double latitude = place.getLatLng().latitude;
                 double longitude = place.getLatLng().longitude;
-                WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude);
+                WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude,"");
 
                 //임시코드
                 startActivity(new Intent(getApplicationContext(), RoomActivity.class));

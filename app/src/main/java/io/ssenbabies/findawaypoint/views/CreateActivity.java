@@ -124,7 +124,7 @@ public class CreateActivity extends AppCompatActivity {
 
                 if(event.getAction() == MotionEvent.ACTION_UP) {
                     if(event.getRawX() >= (editAppointment.getRight() - editAppointment.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                        WaySocket.getInstance().requestCreateRoom(editAppointment.getText().toString(),"");
+                        WaySocket.getInstance().requestCreateRoom(editAppointment.getText().toString());
                         return true;
                     }
                 }
@@ -168,25 +168,12 @@ public class CreateActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onPickEventReceived(JSONObject result) {
-
-            }
-
-            @Override
-            public void onConnectionEventReceived() {
-
-            }
-
-            @Override
-            public void onReloadEventReceived(JSONObject result) {
-
-            }
-
-            @Override
-            public void onEntranceEventReceived(JSONObject result) {
-
-            }
+            @Override public void onPickResultReceived(JSONObject result) { }
+            @Override public void onRoomListReceived(JSONObject result) { }
+            @Override public void onCompleteResultReceived(JSONObject reulst) { }
+            @Override public void onConnectionEventReceived() { }
+            @Override public void onReloadEventReceived(JSONObject result) { }
+            @Override public void onEntranceEventReceived(JSONObject result) { }
         });
     }
 
