@@ -3,23 +3,30 @@ package io.ssenbabies.findawaypoint.views;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private DBHelper dbHelper;
 
     private Button go;// 테스트를 위한 버튼
+    private Button start_go;// 테스트를 위한 버튼(출발지 설정)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         List<Room> rooms = dbHelper.getAppointments();
 
         go = (Button) findViewById(R.id.btn_go);    //테스트용 버튼
+        start_go = (Button) findViewById(R.id.btn_start); //테스트용 버튼
 
         btnAddRoom = (FloatingActionButton) findViewById(R.id.btnAddRoom);
         editCode = (EditText) findViewById(R.id.edit_code);
@@ -88,9 +97,65 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 switch(v.getId()) {
-                    case R.id.btn_go:
+                    case R.id.btn_go: //지도 테스트
                         Intent intent = new Intent(MainActivity.this, ShareActivity.class);
                         startActivity(intent);
+                        break;
+                }
+            }
+        });
+
+        //출발지 팝업
+        start_go.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch(v.getId()) {
+                    case R.id.btn_start:
+
+                        LayoutInflater dialog = LayoutInflater.from(MainActivity.this);
+                        final View dialogLayout = dialog.inflate(R.layout.item_dialog, null);
+                        final Dialog myDialog = new Dialog(MainActivity.this);
+
+                        myDialog.setTitle("알림");
+                        myDialog.setContentView(dialogLayout);
+                        myDialog.show();
+
+                        String result, result2, result3;
+                        result = "     나를 포함하여" + "\n";
+                        int count = 3; // 방에 참여한 사람 수
+
+                        result2 = "총 " + String.valueOf(count) + "명의 약속장소를" + "\n";
+                        result3 = "  추천 받으시겠어요?";
+
+                        result += result2;
+                        result += result3;
+
+                        TextView tv_result = (TextView) dialogLayout.findViewById(R.id.tv_text);
+                        tv_result.setText(result);
+
+                        Button btn_ok = (Button)dialogLayout.findViewById(R.id.btn_ok);
+                        Button btn_cancel = (Button)dialogLayout.findViewById(R.id.btn_cancel);
+
+                        btn_ok.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {     //OK 누르면 할거
+                                Toast.makeText(MainActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+                                myDialog.cancel();
+                            }
+                        });
+
+                        btn_cancel.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                Toast.makeText(MainActivity.this, "NO", Toast.LENGTH_SHORT).show();
+                                myDialog.cancel();
+                            }
+                        });
                         break;
                 }
             }

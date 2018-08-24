@@ -182,7 +182,7 @@ public class CreateActivity extends AppCompatActivity {
 
     private void shareRoomCode(String currentRoomCode){
         //공유하는 코드(라인, 카카오, 문자)
-        String subject = "방코드";
+        String subject = "오늘 우리가 만날 장소, 여기닷! 코드를 입력해주세요";
         if (currentRoomCode==null || currentRoomCode.length()<2){
          currentRoomCode="fake";
         }
@@ -200,12 +200,9 @@ public class CreateActivity extends AppCompatActivity {
             targetedShareIntents.add(lineIntent);
 
         //문자
-
         Intent snsIntent = new Intent(Intent.ACTION_VIEW);
         snsIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         snsIntent.putExtra(Intent.EXTRA_TEXT, currentRoomCode);
-        //  snsIntent.putExtra("subject", "방코드");
-        //  snsIntent.putExtra("text", "asd123$@");
         snsIntent.setType("vnd.android-dir/mms-sms");
 
         if(snsIntent != null)
