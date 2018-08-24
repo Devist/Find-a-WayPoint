@@ -16,12 +16,16 @@ import io.ssenbabies.findawaypoint.R;
 import io.ssenbabies.findawaypoint.databases.DBHelper;
 import io.ssenbabies.findawaypoint.views.MyLocationActivity;
 import io.ssenbabies.findawaypoint.views.RoomActivity;
+import io.ssenbabies.findawaypoint.views.widget.DetailDialog;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     Context context;
     List<Room> rooms;
     int item_layout;
     DBHelper dbHelper;
+
+    DetailDialog detailDialog;
+
 
     public RoomAdapter(Context context, List<Room> rooms, int item_layout) {
         this.context = context;
@@ -38,7 +42,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         dbHelper = new DBHelper(holder.itemView.getContext(), "MyInfo.db", null, 1);
         final Room room = rooms.get(position);
 
@@ -65,8 +69,13 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                         v.getContext().startActivity(intent);
                     }
                 }else{
+
                     Toast.makeText(context, room.getRoomID(), Toast.LENGTH_SHORT).show();
                     String[] result = dbHelper.getDetailAppointment(room.getRoomID());
+                    detailDialog = new DetailDialog(holder.itemView.getRootView().getContext()
+                            ,room.getRoomTitle(),room.getRoomDate(),result[5],result[2],result[3]);
+                    
+                    detailDialog.show();
                     Log.d("로컬 디비 테스트", result[0]);
                     Log.d("로컬 디비 테스트", result[1]);
                     Log.d("로컬 디비 테스트", result[2]);
@@ -77,6 +86,8 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                 }
             }
         });
+
+
     }
 
     @Override
