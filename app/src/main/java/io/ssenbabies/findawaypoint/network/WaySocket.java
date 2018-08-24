@@ -81,6 +81,7 @@ public class WaySocket {
     }
 
     public void requestEntrance(String currentRoomCode, String userName) {  //ENTRANCE 이벤트 발생기
+        Log.d("테스트","방 입장 요청");
         JSONObject data = new JSONObject();
         try {
             data.put("room_code", currentRoomCode);
@@ -139,7 +140,6 @@ public class WaySocket {
     private Emitter.Listener onConnectionResultReceived = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
             JSONObject receivedData = (JSONObject) args[0];
             if(listener!=null)
                 listener.onConnectionEventReceived();
@@ -150,7 +150,6 @@ public class WaySocket {
     private Emitter.Listener onEntranceResultRecieved = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            // 전달받은 데이터는 아래와 같이 추출할 수 있습니다.
             JSONObject receivedData = (JSONObject) args[0];
             if(listener!=null)
                 listener.onEntranceEventReceived(receivedData);
