@@ -435,6 +435,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             //홈버튼
             case R.id.btn_home:
                 startActivity(new Intent(MapActivity.this, MainActivity.class));
+                finish();
                 break;
 
             case R.id.btn_cafe:

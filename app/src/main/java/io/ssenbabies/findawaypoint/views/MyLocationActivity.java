@@ -167,6 +167,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 Log.d("테스트",Double.toString(longitude));
 
                 startActivity(intent);
+                finish();
             }
         }
     }
