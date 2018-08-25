@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 import io.ssenbabies.findawaypoint.network.WaySocket;
 import io.ssenbabies.findawaypoint.utils.Location;
 import io.ssenbabies.findawaypoint.views.adapters.Friend;
@@ -61,6 +62,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleMap map; // 구글 맵
     private TextView tvPlaceDetails;
     private FloatingActionButton fabPickPlace;
+    private String currentRoomCode;
 
     private LinearLayoutManager mFriendsTopViewManager;
     private RecyclerView mFriendsView;
@@ -69,6 +71,8 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Button goPlace;
 
+    private DBHelper dbHelper;
+    private String[] myList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +80,14 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_room);
 
         Intent intent = getIntent();
+        currentRoomCode = intent.getExtras().getString("room_code");
         try{
             lat = intent.getExtras().getDouble("lat");
             lng = intent.getExtras().getDouble("lng");
         }catch(Exception e){
             e.printStackTrace();
         }
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
 
         setLayout();
         setListener();
@@ -102,11 +108,13 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         myPlace = (EditText) findViewById(R.id.my_appointment);
         goPlace = (Button)findViewById(R.id.btn_go_place);
 
-        Friend[] friend = new Friend[5];
+        Friend[] friend = new Friend[4];
+        myList = new String[]{"오동환","김태준","이산하","성락원"};
         friend[0] = new Friend(1,"오동환");
         friend[1] = new Friend(0,"김태준");
         friend[2] = new Friend(1,"이산하");
         friend[3] = new Friend(0,"성락원");
+
 
         List<Friend> friends = new ArrayList<>();
 
@@ -160,6 +168,8 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
                             @Override
                             public void onClick(View v)
                             {     //OK 누르면 할거 -> 장소 추천화면으로 이동
+
+                                dbHelper.updateFriends(currentRoomCode,myList);
                                 Toast.makeText(RoomActivity.this, "Ok", Toast.LENGTH_SHORT).show();
                                 myDialog.cancel();
 
@@ -172,7 +182,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 float lng = location.longitude;
 
                                                 Intent intent = new Intent(getApplication(), MapActivity.class);
-
+                                                intent.putExtra("room_code",currentRoomCode);
                                                 intent.putExtra("MidLat", lat);
                                                 intent.putExtra("MidLng", lng);
                                            //     intent.putExtra("room_name", room);

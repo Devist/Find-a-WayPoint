@@ -45,7 +45,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         dbHelper = new DBHelper(holder.itemView.getContext(), "MyInfo.db", null, 1);
         final Room room = rooms.get(position);
-
+        Log.d("룸코드",room.getRoomID());
         holder.roomTitle.setText(room.getRoomTitle());
         holder.roomDate.setText(room.getRoomDate());
         if(room.getIsOnGoing()==1 )
@@ -57,6 +57,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent;
+
                 if(room.getIsOnGoing()==1){
                     if(room.getAlreadyPick()==0){
                         intent = new Intent(v.getContext(), MyLocationActivity.class);
@@ -65,6 +66,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
                     }else if(room.getAlreadyPick()==1){
                         intent = new Intent(v.getContext(), RoomActivity.class);
                         intent.putExtra("roomCode",room.getRoomID());
+                        intent.putExtra("room_code",room.getRoomID());
                         intent.putExtra("place",room.getRoomTitle());
                         v.getContext().startActivity(intent);
                     }
