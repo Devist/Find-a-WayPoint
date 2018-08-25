@@ -155,7 +155,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void delete( ) {
 
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("delete from search_table");
+        db.execSQL("delete from APPOINTMENTS");
         db.close();
     }
 
