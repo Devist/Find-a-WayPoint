@@ -160,6 +160,7 @@ public class MyLocationActivity extends AppCompatActivity implements GoogleApiCl
                 //임시코드
                 Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
                 intent.putExtra("place", placeName);
+                intent.putExtra("room_code",currentRoomCode);
                 intent.putExtra("lat",latitude);
                 intent.putExtra("lng",longitude);
                 Log.d("테스트",Double.toString(latitude));

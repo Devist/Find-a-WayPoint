@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.ssenbabies.findawaypoint.databases.DBHelper;
 import io.ssenbabies.findawaypoint.network.RetrofitService;
 import io.ssenbabies.findawaypoint.views.adapters.Place;
 import io.ssenbabies.findawaypoint.views.adapters.PlaceAdapter;
@@ -78,17 +79,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Spinner spinner;
     private ArrayAdapter<CharSequence> adspin;
     LinearLayout layout; // 지하철역 동적으로 생성하기 위한 레이아웃
-
+    DBHelper dbHelper;
+    String curRoomCode;
     ArrayList<Marker> previous_marker = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        dbHelper = new DBHelper(getApplicationContext(), "MyInfo.db", null, 1);
+
+
         Intent intent = getIntent();
         lat = intent.getExtras().getFloat("MidLat");
         lng = intent.getExtras().getFloat("MidLng");
         room = intent.getStringExtra("room_name");
+        curRoomCode = intent.getExtras().getString("room_code");
+
 
         Log.d("Location_lat", String.valueOf(lat));
         Log.d("Location_lng", String.valueOf(lng));
@@ -277,6 +284,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                 result_name[1] = result_name[1].substring(0, result_name[1].length() - 1);
                                 tv.setText(result_name[1]);
+                                Log.d("룸코드",curRoomCode);
+                                dbHelper.updatePlaceList(curRoomCode,(getAddress(MapActivity.this, lat, lng)),result_name[1]);
                                 // layout param 설정
                                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 lp.setMargins(0,0,15,0);
