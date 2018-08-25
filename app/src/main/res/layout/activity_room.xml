@@ -31,7 +31,6 @@
                 android:layout_alignBottom="@+id/image_view"
                 android:layout_marginStart="60dp"
                 android:paddingBottom="25dp"
-                android:clickable="false"
                 android:drawableRight="@drawable/ic_edit_custom"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
