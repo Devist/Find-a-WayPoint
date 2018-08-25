@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.ssenbabies.findawaypoint.network.WaySocket;
 import io.ssenbabies.findawaypoint.utils.Location;
 import io.ssenbabies.findawaypoint.views.adapters.Friend;
 import io.ssenbabies.findawaypoint.views.adapters.FriendAdapter;
@@ -98,6 +99,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFriendsView.setLayoutManager(mFriendsTopViewManager);
         mFriendsView.setHasFixedSize(true);
 
+        myPlace = (EditText) findViewById(R.id.my_appointment);
         goPlace = (Button)findViewById(R.id.btn_go_place);
 
         Friend[] friend = new Friend[5];
@@ -193,6 +195,56 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+
+        myPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (v.getId()) {
+
+                    case R.id.my_appointment:
+
+                        //위치 입력
+                        Toast.makeText(RoomActivity.this, "위치 수정", Toast.LENGTH_SHORT).show();
+                        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                        try {
+                            startActivityForResult(builder.build(RoomActivity.this), 1);
+                        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+
+            if (resultCode == RESULT_OK) {
+                Log.d("테스트","진입");
+                Place place = PlacePicker.getPlace(data, this);
+                StringBuilder stBuilder = new StringBuilder();
+                String placeName = String.format("%s", place.getName());
+                double latitude = place.getLatLng().latitude;
+                double longitude = place.getLatLng().longitude;
+              //  WaySocket.getInstance().requestPick(currentRoomCode, latitude,longitude,"");
+
+                //임시 코드. 나중에 onPickResultReceived 로 옮겨야함
+             //   dbHelper.updatePickStateToDone(currentRoomCode);
+                //임시코드
+                Intent intent = new Intent(getApplicationContext(), RoomActivity.class);
+                intent.putExtra("place", placeName);
+                intent.putExtra("lat",latitude);
+                intent.putExtra("lng",longitude);
+                Log.d("테스트",Double.toString(latitude));
+                Log.d("테스트",Double.toString(longitude));
+
+                startActivity(intent);
+            }
+        }
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
