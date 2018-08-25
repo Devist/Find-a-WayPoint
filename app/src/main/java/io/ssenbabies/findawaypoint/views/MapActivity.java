@@ -174,7 +174,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-
         //주변 지하철역 정보
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://52.79.94.139:3000")
@@ -195,6 +194,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 if(response.isSuccessful()) {
 
+                    Log.d("onSuccess", "성공");
                     Log.d("mylat", String.valueOf(lat));
                     Log.d("mylng", String.valueOf(lng));
 
@@ -211,7 +211,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         for(int i=0; i<arr.size(); i++) {
 
                             JsonObject station = (JsonObject) arr.get(i);
-                           // Log.d("역 이름 : ", String.valueOf(station.get("stationName")));
+                            Log.d("역 이름 : ", String.valueOf(station.get("stationName")));
 
                             JsonArray lineNumberArray = (JsonArray) station.get("stationLineNumber");
 
@@ -284,8 +284,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                 result_name[1] = result_name[1].substring(0, result_name[1].length() - 1);
                                 tv.setText(result_name[1]);
-                                Log.d("룸코드",curRoomCode);
-                                dbHelper.updatePlaceList(curRoomCode,(getAddress(MapActivity.this, lat, lng)),result_name[1]);
                                 // layout param 설정
                                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 lp.setMargins(0,0,15,0);
@@ -299,7 +297,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-
+                Log.d("onFailrue", "실패");
             }
         });
 
