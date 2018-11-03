@@ -169,7 +169,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onClick(View v)
                             {     //OK 누르면 할거 -> 장소 추천화면으로 이동
 
-                                dbHelper.updateFriends(currentRoomCode,myList);
+                                //dbHelper.updateFriends(currentRoomCode,myList);
                                 Toast.makeText(RoomActivity.this, "Ok", Toast.LENGTH_SHORT).show();
                                 myDialog.cancel();
 
@@ -182,7 +182,7 @@ public class RoomActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                 float lng = location.longitude;
 
                                                 Intent intent = new Intent(getApplication(), MapActivity.class);
-                                                intent.putExtra("room_code",currentRoomCode);
+                                            //    intent.putExtra("room_code",currentRoomCode);
                                                 intent.putExtra("MidLat", lat);
                                                 intent.putExtra("MidLng", lng);
                                            //     intent.putExtra("room_name", room);

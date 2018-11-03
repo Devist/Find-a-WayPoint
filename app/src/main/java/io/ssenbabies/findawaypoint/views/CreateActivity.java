@@ -73,7 +73,7 @@ public class CreateActivity extends AppCompatActivity {
                 editAppointment.setFocusable(false);
                 btnShare.setText("약속하러 가기");
 
-                shareRoomCode(currentRoomCode);
+                shareRoomCode(currentRoomCode, editAppointment.getText().toString());
             }else{
                 Intent intent = new Intent(getApplicationContext(),MyLocationActivity.class);
                 intent.putExtra("roomCode", currentRoomCode);
@@ -106,12 +106,12 @@ public class CreateActivity extends AppCompatActivity {
         WaySocket.getInstance().setWaySocketListener(new WaySocket.WaySocketListener() {
             @Override
             public void onCreateResultReceived(JSONObject result) {
-                hideKeyboard(getCurrentFocus());
+                        hideKeyboard(getCurrentFocus());
 
-                try{
-                    int status = result.getInt("status");
+                        try{
+                            int status = result.getInt("status");
 
-                    if(status==WaySocket.SUCCESS){
+                            if(status==WaySocket.SUCCESS){
                         currentRoomCode = result.getString("room_code");
                         dbHelper.setAppointment(currentRoomCode,editAppointment.getText().toString());
                         runOnUiThread(new Runnable() {
@@ -183,12 +183,15 @@ public class CreateActivity extends AppCompatActivity {
         return null;
     }
 
-    private void shareRoomCode(String currentRoomCode){
+    private void shareRoomCode(String roomCode, String roomName) {
         //공유하는 코드(라인, 카카오, 문자)
-        String subject = "오늘 우리가 만날 장소, 여기닷! 코드를 입력해주세요";
-        if (currentRoomCode==null || currentRoomCode.length()<2){
+
+        if (currentRoomCode==null || currentRoomCode.length()<2) {
          currentRoomCode="fake";
         }
+
+        String subject = "오늘 우리가 만날 장소, 여기닷! '" + roomName + "'";
+        String currentRoomCode = "코드를 입력해 주세요 : '" + roomCode + "'";
 
         List targetedShareIntents = new ArrayList<>();
 
@@ -204,6 +207,7 @@ public class CreateActivity extends AppCompatActivity {
 
         //문자
         Intent snsIntent = new Intent(Intent.ACTION_VIEW);
+
         snsIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         snsIntent.putExtra(Intent.EXTRA_TEXT, currentRoomCode);
         snsIntent.setType("vnd.android-dir/mms-sms");
@@ -214,6 +218,5 @@ public class CreateActivity extends AppCompatActivity {
         Intent chooser = Intent.createChooser((Intent) targetedShareIntents.remove(0), "방코드 공유하기");
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetedShareIntents.toArray(new Parcelable[]{}));
         startActivity(chooser);
-
     }
 }

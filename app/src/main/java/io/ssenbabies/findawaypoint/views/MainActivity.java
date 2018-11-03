@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
-
     }
 
     private void setLayout(){
@@ -189,5 +188,4 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
         }
     }
-
 }

@@ -298,12 +298,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d("onFailrue", "실패");
+                Log.d("에러코드", t.getMessage());
             }
         });
-
-        //디폴트 -> 카페, 거리순
-        getPlaceData(1,0, lat, lng);
-        btn_cafe.setTextColor(Color.parseColor("#414042"));
     }
 
     //현재 위치 받아오기
@@ -355,6 +352,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .fillColor(Color.parseColor("#880000ff")); //배경색
 
         circle_now = map.addCircle(circle1Km_now);
+
+        //디폴트 -> 카페, 거리순
+        getPlaceData(1,0, lat, lng);
+        btn_cafe.setTextColor(Color.parseColor("#414042"));
     }
 
     // 위도, 경도 -> 주소값
@@ -482,7 +483,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
     }
-
 
     // 주변 장소 출력
     void getPlaceData(int type,  int sort, double lat, double lng) {
